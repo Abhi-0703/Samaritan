@@ -1,0 +1,12 @@
+{
+  "test_key": "call_30",
+  "split": "test",
+  "language": "hinglish",
+  "called_time_ist": "15:55",
+  "borrower_requested_time": false,
+  "noisy": true,
+  "is_clean": true,
+  "hard_negative": true,
+  "expected_violations": [],
+  "notes": "Firm repeated date requests, late-fee mention, confirming office details (V9, V5 negative)."
+}

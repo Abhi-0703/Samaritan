@@ -1,0 +1,12 @@
+{
+  "test_key": "call_24",
+  "split": "test",
+  "language": "marathi",
+  "called_time_ist": "17:05",
+  "borrower_requested_time": false,
+  "noisy": true,
+  "is_clean": true,
+  "hard_negative": false,
+  "expected_violations": [],
+  "notes": "Easy compliant Marathi call."
+}

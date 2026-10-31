@@ -1,0 +1,19 @@
+{
+  "test_key": "call_20",
+  "split": "dev",
+  "language": "hinglish",
+  "called_time_ist": "13:05",
+  "borrower_requested_time": false,
+  "noisy": true,
+  "is_clean": false,
+  "hard_negative": false,
+  "expected_violations": [
+    {
+      "rule_code": "V6",
+      "approx_time_s": null,
+      "quote_hint": "Mahesh Kamble ne loan liya tha, teen mahine se EMI nahi bhari",
+      "difficulty": "easy"
+    }
+  ],
+  "notes": "Debt disclosed to a colleague on the office phone."
+}

@@ -1,0 +1,12 @@
+{
+  "test_key": "call_01",
+  "split": "dev",
+  "language": "hinglish",
+  "called_time_ist": "11:20",
+  "borrower_requested_time": false,
+  "noisy": false,
+  "is_clean": true,
+  "hard_negative": false,
+  "expected_violations": [],
+  "notes": "Easy compliant reminder call."
+}

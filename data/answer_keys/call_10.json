@@ -1,0 +1,19 @@
+{
+  "test_key": "call_10",
+  "split": "test",
+  "language": "hinglish",
+  "called_time_ist": "12:50",
+  "borrower_requested_time": false,
+  "noisy": true,
+  "is_clean": false,
+  "hard_negative": false,
+  "expected_violations": [
+    {
+      "rule_code": "V6",
+      "approx_time_s": null,
+      "quote_hint": "Prakash ji ne personal loan liya tha, unki chaar EMI baaki hain",
+      "difficulty": "hard"
+    }
+  ],
+  "notes": "Polite agent discloses the debt to the borrower's brother."
+}

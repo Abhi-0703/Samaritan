@@ -1,0 +1,25 @@
+{
+  "test_key": "call_16",
+  "split": "dev",
+  "language": "hinglish",
+  "called_time_ist": "16:20",
+  "borrower_requested_time": false,
+  "noisy": false,
+  "is_clean": false,
+  "hard_negative": false,
+  "expected_violations": [
+    {
+      "rule_code": "V8",
+      "approx_time_s": null,
+      "quote_hint": null,
+      "difficulty": "easy"
+    },
+    {
+      "rule_code": "V5",
+      "approx_time_s": null,
+      "quote_hint": "society mein sabko pata chal jayega",
+      "difficulty": "easy"
+    }
+  ],
+  "notes": "No introduction at all, then threat to tell the neighbours."
+}

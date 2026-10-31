@@ -1,0 +1,19 @@
+{
+  "test_key": "call_19",
+  "split": "test",
+  "language": "marathi",
+  "called_time_ist": "22:10",
+  "borrower_requested_time": false,
+  "noisy": false,
+  "is_clean": false,
+  "hard_negative": false,
+  "expected_violations": [
+    {
+      "rule_code": "V1",
+      "approx_time_s": null,
+      "quote_hint": null,
+      "difficulty": "easy"
+    }
+  ],
+  "notes": "Only violation is calling after 19:00."
+}

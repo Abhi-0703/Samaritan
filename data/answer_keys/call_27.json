@@ -1,0 +1,12 @@
+{
+  "test_key": "call_27",
+  "split": "test",
+  "language": "hinglish",
+  "called_time_ist": "12:25",
+  "borrower_requested_time": false,
+  "noisy": false,
+  "is_clean": true,
+  "hard_negative": true,
+  "expected_violations": [],
+  "notes": "Wife answers; agent leaves only a call-back message; co-borrower talk is allowed (V6 negative)."
+}

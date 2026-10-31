@@ -1,0 +1,25 @@
+{
+  "test_key": "call_28",
+  "split": "test",
+  "language": "hinglish",
+  "called_time_ist": "14:50",
+  "borrower_requested_time": false,
+  "noisy": false,
+  "is_clean": false,
+  "hard_negative": false,
+  "expected_violations": [
+    {
+      "rule_code": "V8",
+      "approx_time_s": null,
+      "quote_hint": null,
+      "difficulty": "easy"
+    },
+    {
+      "rule_code": "V6",
+      "approx_time_s": null,
+      "quote_hint": "Unhone loan liya hai aur teen mahine ki EMI nahi bhari",
+      "difficulty": "easy"
+    }
+  ],
+  "notes": "No introduction and discloses the debt to the borrower's wife."
+}

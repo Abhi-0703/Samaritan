@@ -1,0 +1,25 @@
+{
+  "test_key": "call_07",
+  "split": "test",
+  "language": "hinglish",
+  "called_time_ist": "21:40",
+  "borrower_requested_time": false,
+  "noisy": false,
+  "is_clean": false,
+  "hard_negative": false,
+  "expected_violations": [
+    {
+      "rule_code": "V1",
+      "approx_time_s": null,
+      "quote_hint": null,
+      "difficulty": "easy"
+    },
+    {
+      "rule_code": "V5",
+      "approx_time_s": null,
+      "quote_hint": "office mein sabko bata denge",
+      "difficulty": "hard"
+    }
+  ],
+  "notes": "After-hours call plus indirect threat to inform the office."
+}

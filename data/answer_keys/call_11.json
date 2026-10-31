@@ -1,0 +1,25 @@
+{
+  "test_key": "call_11",
+  "split": "dev",
+  "language": "hinglish",
+  "called_time_ist": "14:30",
+  "borrower_requested_time": false,
+  "noisy": true,
+  "is_clean": false,
+  "hard_negative": false,
+  "expected_violations": [
+    {
+      "rule_code": "V7",
+      "approx_time_s": null,
+      "quote_hint": "main high court ka advocate bol raha hoon",
+      "difficulty": "easy"
+    },
+    {
+      "rule_code": "V3",
+      "approx_time_s": null,
+      "quote_hint": "haath-pair tod denge",
+      "difficulty": "easy"
+    }
+  ],
+  "notes": "Posing as a high court advocate, then threatening force."
+}

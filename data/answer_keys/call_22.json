@@ -1,0 +1,12 @@
+{
+  "test_key": "call_22",
+  "split": "dev",
+  "language": "hinglish",
+  "called_time_ist": "19:00",
+  "borrower_requested_time": false,
+  "noisy": false,
+  "is_clean": true,
+  "hard_negative": true,
+  "expected_violations": [],
+  "notes": "Exactly 19:00 is allowed (V1 boundary negative); also tests spoken-digit PII masking."
+}

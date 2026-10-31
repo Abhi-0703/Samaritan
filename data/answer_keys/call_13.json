@@ -1,0 +1,19 @@
+{
+  "test_key": "call_13",
+  "split": "test",
+  "language": "hinglish",
+  "called_time_ist": "07:42",
+  "borrower_requested_time": false,
+  "noisy": true,
+  "is_clean": false,
+  "hard_negative": false,
+  "expected_violations": [
+    {
+      "rule_code": "V1",
+      "approx_time_s": null,
+      "quote_hint": null,
+      "difficulty": "easy"
+    }
+  ],
+  "notes": "Only violation is calling before 08:00."
+}

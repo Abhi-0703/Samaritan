@@ -1,0 +1,25 @@
+{
+  "test_key": "call_14",
+  "split": "test",
+  "language": "hinglish",
+  "called_time_ist": "11:10",
+  "borrower_requested_time": false,
+  "noisy": false,
+  "is_clean": false,
+  "hard_negative": false,
+  "expected_violations": [
+    {
+      "rule_code": "V7",
+      "approx_time_s": null,
+      "quote_hint": "main RBI ke recovery cell se bol raha hoon",
+      "difficulty": "easy"
+    },
+    {
+      "rule_code": "V4",
+      "approx_time_s": null,
+      "quote_hint": "Kal police aa jayegi aur jail bhej denge",
+      "difficulty": "easy"
+    }
+  ],
+  "notes": "Claims to be the RBI, then threatens police and jail."
+}

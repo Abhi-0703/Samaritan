@@ -1,0 +1,19 @@
+{
+  "test_key": "call_25",
+  "split": "test",
+  "language": "hinglish",
+  "called_time_ist": "18:05",
+  "borrower_requested_time": false,
+  "noisy": false,
+  "is_clean": false,
+  "hard_negative": false,
+  "expected_violations": [
+    {
+      "rule_code": "V3",
+      "approx_time_s": null,
+      "quote_hint": "Hum milne aayenge, aapke bachche bhi wahin honge",
+      "difficulty": "hard"
+    }
+  ],
+  "notes": "Indirect menace about visiting the home with the children present."
+}

@@ -1,0 +1,12 @@
+{
+  "test_key": "call_12",
+  "split": "test",
+  "language": "hinglish",
+  "called_time_ist": "20:30",
+  "borrower_requested_time": true,
+  "noisy": false,
+  "is_clean": true,
+  "hard_negative": true,
+  "expected_violations": [],
+  "notes": "After 19:00 but the borrower asked for the time (V1 negative)."
+}

@@ -1,0 +1,12 @@
+{
+  "test_key": "call_03",
+  "split": "test",
+  "language": "hinglish",
+  "called_time_ist": "09:15",
+  "borrower_requested_time": false,
+  "noisy": false,
+  "is_clean": true,
+  "hard_negative": true,
+  "expected_violations": [],
+  "notes": "Truthful legal-recovery-desk agent; mentions notice and credit bureau lawfully (V7, V4 negative)."
+}
