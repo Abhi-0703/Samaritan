@@ -1,48 +1,52 @@
 # progress.md
-Last updated: 2026-11-01 02:14 IST | Phase: 0 | Step: finished, awaiting user approval
+Last updated: 2026-11-01 04:10 IST | Phase: 1 | Step: built and checked, awaiting user design feedback
 
 ## Status
-Phase 0 is built: repo skeleton, 30 call scripts, 30 answer keys, coverage report and recording guide. All automated acceptance checks pass. Waiting for the user to confirm the scripts are actable and to answer the Phase 0 questions. No code for Phase 1+ exists yet. Deadline: 2026-11-10 23:59 IST.
+Phase 0 is done and the user told the agent to proceed. Phase 1 (full web UI on mock data) is built: all seven routes, light and dark themes, upload drawer, call detail with waveform and transcript sync, evidence page. `npm run lint` and `npm run build` pass. Waiting for the user to look at it and give design feedback before Phase 2. The Accuracy figures are sample data, labelled as such in the UI.
 
 ## Next action
-When the user approves Phase 0, start Phase 1: first send ONE message with the Phase 1 [ASK USER] items (none needed beforehand except screenshots at the end), then scaffold `web/` with `npx create-next-app@latest web --typescript --tailwind --eslint --app --src-dir` (move `web/.env.example` aside first; the folder must be empty, then restore it) and build the design system before pages (plan.md Section 12, Phase 1).
+Ask the user for Phase 1 feedback (screenshots: Overview, Calls, Call detail, Accuracy in light and dark; ask whether they want a different accent colour) and for approval. On approval, start Phase 2 by sending ONE message with the Phase 2 [ASK USER] list (plan.md Section 12): Gnani key into `api/.env`, dashboard credits and rate limits, Groq and Gemini keys and model names, permission before any real Gnani call, recordings in `data/audio/`, RBI-reference drafting, Python 3.11 and ffmpeg installs.
 
 ## Completed
-- Phase 0 skeleton: git initialised on `main`, folders per plan 8.1, `.gitignore` (`.env*` ignored, `.env.example` kept; `data/audio/` ignored), `api/.env.example`, `web/.env.example`, README stub, `docs/decisions.md`. Verified by `ls` and `git status`.
-- Phase 0 test material: `data/scripts/call_01..30.md`, `data/answer_keys/call_01..30.json`, `data/COVERAGE.md`, `data/RECORDING_GUIDE.md`. Verified by `python3 scripts/check_testset.py` -> "OK: 30 scripts and keys agree". Checked: markers vs keys, every quote_hint inside its marked line, header time/language/noise/requested-time vs key, V1 consistent with time, word counts 255-328, unique loan refs, all Section 9.1 totals and per-rule dev/test minimums.
+- Phase 0: repo skeleton, 30 scripts, 30 answer keys, COVERAGE.md, RECORDING_GUIDE.md. Verified by `python3 scripts/check_testset.py` (scripts and keys agree; all Section 9.1 totals met).
+- Phase 1 build: `npm run lint` clean, `npm run build` passes, TypeScript strict, no `lib/mock` imports outside `src/lib` (ESLint rule enforces it), no forbidden style patterns found by grep.
+- Phase 1 checked by hand in the browser: Overview, Calls (filter, search, sort, polling), upload drawer (file validation, wrong then right passcode, new row goes Queued to Done), call detail (waveform markers, click-to-seek, `?t=` deep link, Confirm/Dismiss recomputes score), failed call Retry, evidence page, Agents list and detail, Rules toggle (V9 off removes it from Overview), Accuracy slices. Light and dark seen at 1280 or 1440 px; mobile width seen on call detail.
+- Contrast measured for the main colour pairs in both themes; all at 4.5:1 or better after the dark-mode fixes (D-009).
 
 ## In progress / unverified
-- Phase 0 acceptance item "user confirms the scripts are actable" - not yet confirmed by the user.
-- Script wording is untested against real speech and real transcription; some lines may need adjusting after the first recordings.
-- Marathi scripts (255-273 spoken words) may record shorter than 1.5 minutes - see D-007.
+- Not exercised: swap-roles button, "Fill from CSV", the passcode dialog (only the stored-passcode path ran), keyboard-only walkthrough, screen-reader pass, actual print preview of the evidence page, real audio playback sound (visual seek and progress verified), Marathi call detail page, Agents/Rules/Evidence in dark.
+- Dev server logged one React hydration warning that was fixed (nav link class); a final clean reload of every route for console errors was not done.
+- Placeholder audio is synthetic tones, so the waveform does not look like speech.
+- All numbers on the Accuracy page are sample data from the mock client, not measurements.
 
 ## Waiting on the user
-- Approval of Phase 0 and confirmation the 30 scripts are actable.
-- GitHub repo to push to (if any): not yet provided.
-- Does the friend playing the borrower speak Marathi (8 calls need it)? Not yet answered.
-- Is separate-channel recording possible (agent and borrower each recorded on their own channel)? Not yet answered.
-- Recordings in `data/audio/`: 0 of 30 received (first batch suggested in RECORDING_GUIDE.md section 7).
-- Whether to draft RBI clause references for the rules (plan 5.2): not yet answered.
-- Later (Phase 2 start): Gnani key, dashboard facts, Groq/Gemini keys and model names, permission before the first real Gnani call.
+- Phase 1 design feedback and approval; accent colour preference.
+- Phase 0 questions still open: friend speaks Marathi?, separate-channel recording possible?, draft RBI clause references?, GitHub repo.
+- Recordings in `data/audio/`: 0 of 30.
+- Later (Phase 2): Gnani key, Groq and Gemini keys and models, dashboard facts, permission for first real Gnani call.
 
 ## Key decisions
-- `Gnani/` folder is the repo root, no extra `samaritan/` folder (D-001).
-- Answer keys gain optional `hard_negative` and `notes` fields; scripts mark violating lines with `<<Vn>>` so scripts and keys can be machine-checked (D-002, D-003).
-- Marathi quote hints are Devanagari (D-004). 250-word minimum applies to spoken Devanagari words (D-007).
-- Allocation of the 30 calls: see D-006 and `data/COVERAGE.md`. Dev = calls 01, 02, 05, 06, 09, 11, 16, 20, 22, 26.
+- `Gnani/` is the repo root (D-001). Test-set conventions: D-002 to D-007.
+- next-themes replaced by a small provider (React 19 script error) (D-008). Dark filled buttons and accent text adjusted for AA (D-009).
+- Next.js 16.4.3 with Cache Components kept; dynamic-id pages use `instant = false` (D-010). shadcn is Base UI based; TanStack Table v9 core only (D-011).
+- Mock semantics the real API must match are listed in D-012 (percent vs fraction, 14-day critical count, V1 and V8 fields, passcode `demo123`).
 
 ## Deviations from plan.md
-- None to requirements. Additive only: extra optional key fields and script markers (see decisions above), plus `scripts/check_testset.py`, which plan.md does not list.
+- next-themes not used (D-008). Dark-mode accent colours slightly extended (D-009). Both recorded in docs/decisions.md.
 
 ## Known issues
-- Local toolchain: system `python3` is 3.9.6 (API needs 3.11+) and `ffmpeg`/`ffprobe` are missing (D-005). Homebrew is installed. Fix before Phase 2; ask the user before installing.
-- `docs/gnani-findings.md` does not exist yet; it is a Phase 2 output.
+- Mock state resets on a full page reload; navigating inside the app keeps it.
+- Toolchain: system Python is 3.9.6 (API needs 3.11+) and ffmpeg is missing (D-005). Ask before installing.
+- Next dev overlay badge can sit over the sidebar's Collapse button in development only.
+- Wavesurfer decodes whole files in the browser; fine for 3 minutes of audio.
 
 ## How to run and verify (commands that currently work)
-- test-set check: `python3 scripts/check_testset.py` (rewrites `data/COVERAGE.md`)
-- web: not built yet   api: not built yet   tests: none yet
+- web: `cd web && npm install && cp .env.example .env.local && npm run dev` (http://localhost:3000)
+- checks: `cd web && npm run lint && npm run build`
+- test set: `python3 scripts/check_testset.py`; placeholder audio: `python3 scripts/make_placeholder_audio.py`
+- api: not built yet   tests: none yet
 
 ## Environment (no secrets)
 - Gnani key: not provided  LLM key: none
-- Database: none yet   Deployed: no
-- Tools: node v24, npm 11, git 2.54, gh 2.98, python3 3.9.6; no ffmpeg
+- Database: none (mock data in memory)   Deployed: no
+- Tools: node v24, npm 11, git 2.54, python3 3.9.6; no ffmpeg

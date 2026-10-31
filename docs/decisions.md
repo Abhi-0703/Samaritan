@@ -29,3 +29,32 @@ Every [DECIDE] choice and every conflict between plan.md and reality is recorded
 ## D-007 — Marathi word counts
 - **Context:** Section 9 asks for 250-450 spoken words per script. Marathi packs more meaning per word than Hinglish, so a 1.5-3 minute Marathi call is fewer words.
 - **Decision:** the 250-word minimum is applied to spoken Devanagari words only (Latin transliteration lines are excluded). The Marathi scripts are 255-273 words, which likely lands near 1.5 minutes. If recordings come out shorter than 1.5 minutes, lengthen the scripts rather than lowering the minimum.
+
+## D-008 — next-themes replaced by a small theme provider
+- **Context:** plan.md Section 12 lists next-themes. It renders an inline `<script>` from a Client Component, which React 19 reports as a console error on every load.
+- **Decision:** `web/src/components/theme-provider.tsx` provides `useTheme` (light, dark, system; kept in localStorage), and the no-flash script is rendered from the root layout, a Server Component, as the Next.js "preventing flash before hydration" guide describes. `next-themes` was uninstalled. Behaviour is the same: a toggle in the sidebar, system preference by default.
+
+## D-009 — Accent text and filled buttons in dark mode
+- **Context:** plan.md Section 3.2 gives the dark accent as `#3B82F6`. White text on it is 3.7:1 and the accent on `#172554` (selected row) is 4.0:1, both below WCAG AA for 12-14 px text, which Section 3.1 requires.
+- **Decision:** `#3B82F6` stays the accent for lines, focus rings, waveform progress and icons. Filled buttons use `#2563EB` in dark (white on it is 5.2:1). Accent-coloured text on the subtle background uses a new token `--brand-text` (`#93C5FD` in dark, 8.2:1; same as the accent in light). All other pairs were measured at 4.5:1 or better.
+
+## D-010 — Next.js 16 with Cache Components
+- **Context:** the installed Next.js (16.4.3) scaffolds with `cacheComponents` and `partialPrefetching` on, and its docs warn that APIs differ from earlier versions.
+- **Decision:** kept the scaffold defaults. List pages are static shells that fetch in the browser. Pages with a dynamic id (`/calls/[id]`, `/calls/[id]/evidence`, `/agents/[id]`) read `params` inside `<Suspense>` and export `instant = false`, because the sidebar's `usePathname()` cannot be resolved at build time for unknown ids. Views using `useSearchParams` sit inside `<Suspense>`. The sidebar's active link is styled from `aria-current` so its class string is the same on server and client.
+
+## D-011 — UI library notes
+- shadcn's current CLI generates the `base-nova` style, built on Base UI rather than Radix (triggers take a `render` prop, not `asChild`), and imports `cn` from shadcn's own `cn` package. Both were accepted as generated.
+- TanStack Table is v9 (`useTable`, `tableFeatures`). Only the core row model is used for rendering; sorting and paging are API parameters, as in plan.md Section 10, so the table never re-sorts data itself.
+- Generated shadcn components were edited to follow Section 3: the off-scale 13 px size became 12 px, and the backdrop blur on dialog and sheet overlays was removed.
+
+## D-012 — Semantics fixed by the Phase 1 mock (the real API must match)
+- `OverviewStats.calls_with_violations_pct` is a percentage from 0 to 100; `Agent.violation_rate` is a fraction from 0 to 1 (as plan.md states).
+- `OverviewStats.critical_flags` counts non-dismissed critical flags on finished calls in the last 14 days. `calls_audited` counts finished calls; `calls_pending` counts queued, transcribing and analysing calls.
+- A call's score, `violations_count` and `max_severity` count only non-dismissed violations of enabled rules. `CallDetail.violations` includes dismissed ones (shown greyed) but hides violations of disabled rules.
+- V8 violations have `start_s = 0` and no quote; V1 violations have `start_s = null`.
+- Mock demo mode: upload, retry and swap-roles need a passcode (`demo123`, shown in the UI only when the client is the mock). Set `NEXT_PUBLIC_MOCK_DEMO_MODE=false` to turn it off.
+- The mock's evaluation figures are illustrative and internally consistent (slices sum to the totals); the Accuracy page says so while the mock client is active. Real figures come in Phase 4.
+- Mock state lives in memory and resets on a full page reload.
+
+## D-013 — Placeholder audio
+- ffmpeg is not installed, so `scripts/make_placeholder_audio.py` writes three synthetic speech-shaped tone files (105, 140 and 180 s, 8 kHz 8-bit WAV, 3.4 MB in total) to `web/public/audio/`. They contain no speech. The six featured mock calls use durations that match these files exactly.
