@@ -1,0 +1,215 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+/* Only four type sizes are allowed (plan Section 3.1): 12, 14, 16 and 24 px. */
+@theme {
+  --text-*: initial;
+  --text-xs: 0.75rem;
+  --text-xs--line-height: 1rem;
+  --text-sm: 0.875rem;
+  --text-sm--line-height: 1.25rem;
+  --text-base: 1rem;
+  --text-base--line-height: 1.5rem;
+  --text-2xl: 1.5rem;
+  --text-2xl--line-height: 2rem;
+}
+
+@theme inline {
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  --font-heading: var(--font-geist-sans);
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-surface: var(--surface);
+  --color-brand: var(--brand);
+  --color-brand-subtle: var(--brand-subtle);
+  --color-brand-text: var(--brand-text);
+
+  --color-critical: var(--critical-fg);
+  --color-critical-bg: var(--critical-bg);
+  --color-high: var(--high-fg);
+  --color-high-bg: var(--high-bg);
+  --color-medium: var(--medium-fg);
+  --color-medium-bg: var(--medium-bg);
+  --color-ok: var(--ok-fg);
+  --color-ok-bg: var(--ok-bg);
+
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+
+  /* 6 px corners, 8 px for dialogs (plan Section 3.1) */
+  --radius-sm: 4px;
+  --radius-md: 4px;
+  --radius-lg: 6px;
+  --radius-xl: 8px;
+  --radius-2xl: 8px;
+  --radius-3xl: 8px;
+  --radius-4xl: 8px;
+}
+
+/* Tokens from plan Section 3.2. Both themes are designed, not inverted. */
+:root {
+  --background: #ffffff;
+  --surface: #fafafa;
+  --border: #e5e5e5;
+  --foreground: #171717;
+  --muted-foreground: #737373;
+  --brand: #1d4ed8;
+  --brand-subtle: #eff6ff;
+  /* Accent for text that sits on --brand-subtle; the plain accent is 4.0:1 there in dark. */
+  --brand-text: #1d4ed8;
+
+  --critical-fg: #b91c1c;
+  --critical-bg: #fef2f2;
+  --high-fg: #c2410c;
+  --high-bg: #fff7ed;
+  --medium-fg: #a16207;
+  --medium-bg: #fefce8;
+  --ok-fg: #15803d;
+  --ok-bg: #f0fdf4;
+
+  --card: var(--background);
+  --card-foreground: var(--foreground);
+  --popover: var(--background);
+  --popover-foreground: var(--foreground);
+  --primary: #1d4ed8;
+  --primary-foreground: #ffffff;
+  --secondary: var(--surface);
+  --secondary-foreground: var(--foreground);
+  --muted: var(--surface);
+  --accent: #f5f5f5;
+  --accent-foreground: var(--foreground);
+  --destructive: var(--critical-fg);
+  --input: #d4d4d4;
+  --ring: #1d4ed8;
+  --chart-1: var(--critical-fg);
+  --chart-2: var(--high-fg);
+  --chart-3: var(--medium-fg);
+  --chart-4: var(--ok-fg);
+  --chart-5: var(--muted-foreground);
+  --radius: 6px;
+  --sidebar: var(--surface);
+  --sidebar-foreground: var(--foreground);
+  --sidebar-primary: var(--brand);
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #f0f0f0;
+  --sidebar-accent-foreground: var(--foreground);
+  --sidebar-border: var(--border);
+  --sidebar-ring: var(--brand);
+}
+
+.dark {
+  --background: #0a0a0a;
+  --surface: #111111;
+  --border: #262626;
+  --foreground: #ededed;
+  --muted-foreground: #a3a3a3;
+  --brand: #3b82f6;
+  --brand-subtle: #172554;
+  --brand-text: #93c5fd;
+
+  --critical-fg: #fca5a5;
+  --critical-bg: #2a1215;
+  --high-fg: #fdba74;
+  --high-bg: #2a1a0e;
+  --medium-fg: #fde047;
+  --medium-bg: #262008;
+  --ok-fg: #86efac;
+  --ok-bg: #0f1f14;
+
+  --card: var(--background);
+  --popover: #111111;
+  --popover-foreground: var(--foreground);
+  /* White on #3B82F6 is 3.7:1 and fails AA at 14 px, so filled buttons use a deeper blue in dark */
+  --primary: #2563eb;
+  --primary-foreground: #ffffff;
+  --accent: #1a1a1a;
+  --input: #333333;
+  --ring: #3b82f6;
+  --sidebar-accent: #1c1c1c;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    @apply font-sans;
+    font-size: 16px;
+  }
+  body {
+    @apply bg-background text-foreground text-sm antialiased;
+    font-weight: 400;
+  }
+  table,
+  .tnum {
+    font-variant-numeric: tabular-nums;
+  }
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+  }
+}
+
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  body {
+    background: #ffffff !important;
+    color: #171717 !important;
+  }
+}
+
+/* wavesurfer renders inside shadow DOM; keep the host from jumping while it loads */
+.waveform-host {
+  min-height: 72px;
+}
+
+/* Recharts draws SVG attributes, so theme colours are applied here instead of via props. */
+.recharts-cartesian-axis-tick-value {
+  fill: var(--muted-foreground);
+  font-size: 12px;
+}
+.recharts-cartesian-grid line {
+  stroke: var(--border);
+}
+.recharts-cartesian-axis-line,
+.recharts-cartesian-axis-tick-line {
+  stroke: var(--border);
+}
+.recharts-tooltip-cursor {
+  fill: var(--accent);
+  fill-opacity: 0.6;
+}
