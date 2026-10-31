@@ -1,0 +1,38 @@
+# Secrets (keep the .env.example templates)
+.env
+.env.*
+!.env.example
+
+# Data that must never be committed
+data/audio/*
+!data/audio/.gitkeep
+*.db
+*.sqlite
+*.sqlite3
+api/.data/
+
+# Dependencies and build output
+node_modules/
+.venv/
+venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.next/
+out/
+dist/
+build/
+*.tsbuildinfo
+next-env.d.ts
+coverage/
+
+# OS and editor
+.DS_Store
+.idea/
+.vscode/
+*.log
+
+# Agent tooling
+.claude/
