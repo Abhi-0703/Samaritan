@@ -58,3 +58,10 @@ Every [DECIDE] choice and every conflict between plan.md and reality is recorded
 
 ## D-013 — Placeholder audio
 - ffmpeg is not installed, so `scripts/make_placeholder_audio.py` writes three synthetic speech-shaped tone files (105, 140 and 180 s, 8 kHz 8-bit WAV, 3.4 MB in total) to `web/public/audio/`. They contain no speech. The six featured mock calls use durations that match these files exactly.
+
+## D-014 — RBI references are drafted but unverified
+- **Context:** plan.md Section 5.2 asks whether to draft clause references; the user said yes. RBI's site blocks automated access behind a CAPTCHA, which was not bypassed, and the secondary sources disagree on some points (see `docs/rbi-references.md`).
+- **Decision:** the nine `rbi_reference` strings now name the likely RBI documents and the topic instead of a bare placeholder, but contain no invented paragraph numbers and keep the `Clause: [to verify]` marker. The user can save the primary PDFs into `docs/rbi-sources/` or paste paragraphs to close the gap.
+
+## D-015 — Toolchain installed
+- On the user's approval, Homebrew installed `python@3.11` (3.11.18, at `/opt/homebrew/bin/python3.11`) and `ffmpeg` (9.0.2, with ffprobe). The API venv must be created with `python3.11`. This resolves D-005.
