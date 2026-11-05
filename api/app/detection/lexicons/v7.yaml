@@ -1,0 +1,24 @@
+# Seeds from plan.md Appendix B plus phrases from the dev-split scripts only (calls 02, 05, 11, 16, 20, 26 and the
+# dev clean calls). The 20 held-out test scripts were NOT used to build or tune this list (plan.md Section 9.3).
+# strength: strong = almost always a violation; weak = a candidate the LLM must judge.
+# lang: hinglish | marathi | both. Patterns are matched on normalised text with punctuation removed.
+rule: V7
+patterns:
+  - { regex: "(police|पुलिस|पोलीस)\\s+(se|से|कडून)\\s+(bol|बोल)", lang: both, strength: strong }
+  - { regex: "(main|mai|मैं)\\s+(court|कोर्ट)\\s+(se|से)", lang: hinglish, strength: strong }
+  - { regex: "(court|कोर्ट)\\s+(ki taraf se|की तरफ से)", lang: hinglish, strength: strong }
+  - { regex: "(rbi|cbi|आरबीआई)\\s+(se|ke|के)\\s+.*(bol|बोल)", lang: both, strength: strong }
+  - { regex: "(advocate|vakil|वकील)\\s+.*(bol raha|bol rahi|बोल रहा|बोल रही)", lang: both, strength: strong }
+  - { regex: "(high court|हाई कोर्ट)\\s+(ka|का)\\s+(advocate|वकील)", lang: hinglish, strength: strong }
+  - { regex: "(case|केस)\\s+(file|दर्ज|फाइल)", lang: hinglish, strength: weak }
+  - { text: "court se", lang: hinglish, strength: weak }
+  - { text: "कोर्ट से", lang: hinglish, strength: weak }
+  - { text: "court", lang: both, strength: weak }
+  - { text: "कोर्ट", lang: both, strength: weak }
+  - { text: "advocate", lang: both, strength: weak }
+  - { text: "वकील", lang: both, strength: weak }
+  - { text: "cbi", lang: both, strength: weak }
+  - { text: "rbi", lang: both, strength: weak }
+  - { text: "legal department", lang: both, strength: weak }
+  - { text: "notice bhej diya", lang: hinglish, strength: weak }
+  - { text: "income tax", lang: both, strength: weak }

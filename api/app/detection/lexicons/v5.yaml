@@ -1,0 +1,27 @@
+# Seeds from plan.md Appendix B plus phrases from the dev-split scripts only (calls 02, 05, 11, 16, 20, 26 and the
+# dev clean calls). The 20 held-out test scripts were NOT used to build or tune this list (plan.md Section 9.3).
+# strength: strong = almost always a violation; weak = a candidate the LLM must judge.
+# lang: hinglish | marathi | both. Patterns are matched on normalised text with punctuation removed.
+rule: V5
+patterns:
+  - { regex: "(sabko|sab ko|sabhi ko)\\s+(bata|bol|pata)", lang: hinglish, strength: strong }
+  - { regex: "padosi\\w*\\s+ko\\s+(bata|bol)", lang: hinglish, strength: strong }
+  - { regex: "(सबको|सब को)\\s+(बता|बोल|पता)", lang: hinglish, strength: strong }
+  - { regex: "(सगळ्यांना|सर्वांना)\\s+(सांग|कळव)", lang: marathi, strength: strong }
+  - { text: "office", lang: both, strength: weak }
+  - { text: "ऑफिस", lang: both, strength: weak }
+  - { text: "boss", lang: both, strength: weak }
+  - { text: "hr", lang: both, strength: weak }
+  - { text: "colleague", lang: both, strength: weak }
+  - { text: "rishtedar", lang: hinglish, strength: weak }
+  - { text: "रिश्तेदार", lang: hinglish, strength: weak }
+  - { text: "padosi", lang: hinglish, strength: weak }
+  - { text: "पड़ोसी", lang: hinglish, strength: weak }
+  - { text: "society", lang: both, strength: weak }
+  - { text: "whatsapp group", lang: both, strength: weak }
+  - { text: "defaulter", lang: both, strength: weak }
+  - { text: "badnaam", lang: hinglish, strength: weak }
+  - { text: "बदनाम", lang: hinglish, strength: weak }
+  - { text: "शेजारी", lang: marathi, strength: weak }
+  - { text: "नातेवाईक", lang: marathi, strength: weak }
+  - { text: "सोसायटी", lang: marathi, strength: weak }

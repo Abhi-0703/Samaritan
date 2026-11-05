@@ -1,0 +1,29 @@
+# Seeds from plan.md Appendix B plus phrases from the dev-split scripts only (calls 02, 05, 11, 16, 20, 26 and the
+# dev clean calls). The 20 held-out test scripts were NOT used to build or tune this list (plan.md Section 9.3).
+# strength: strong = almost always a violation; weak = a candidate the LLM must judge.
+# lang: hinglish | marathi | both. Patterns are matched on normalised text with punctuation removed.
+rule: V4
+patterns:
+  - { regex: "kal\\s+(tak\\s+)?police", lang: hinglish, strength: strong }
+  - { regex: "jail\\s+(bhej|bhijwa|jaana|jana)", lang: hinglish, strength: strong }
+  - { regex: "arrest\\s+(kara|karwa|karva|ho)", lang: hinglish, strength: strong }
+  - { regex: "(पुलिस|पोलीस|पोलिस).*(जेल|तुरुंग|तुरुंगात|गिरफ्तार|अटक)", lang: both, strength: strong }
+  - { regex: "(उद्या|उद्यापर्यंत).*(पोलीस|पोलिस)", lang: marathi, strength: strong }
+  - { text: "police", lang: both, strength: weak }
+  - { text: "पुलिस", lang: both, strength: weak }
+  - { text: "पोलीस", lang: marathi, strength: weak }
+  - { text: "पोलिस", lang: marathi, strength: weak }
+  - { text: "fir", lang: both, strength: weak }
+  - { text: "एफआईआर", lang: both, strength: weak }
+  - { text: "एफ आई आर", lang: both, strength: weak }
+  - { text: "jail", lang: both, strength: weak }
+  - { text: "जेल", lang: both, strength: weak }
+  - { text: "तुरुंग", lang: marathi, strength: weak }
+  - { text: "arrest", lang: both, strength: weak }
+  - { text: "giraftar", lang: both, strength: weak }
+  - { text: "गिरफ्तार", lang: both, strength: weak }
+  - { text: "अटक", lang: marathi, strength: weak }
+  - { text: "warrant", lang: both, strength: weak }
+  - { text: "वारंट", lang: both, strength: weak }
+  - { text: "thana", lang: both, strength: weak }
+  - { text: "थाना", lang: both, strength: weak }

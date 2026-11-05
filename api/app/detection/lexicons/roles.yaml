@@ -1,0 +1,53 @@
+# Seeds from plan.md Appendix B plus phrases from the dev-split scripts only (calls 02, 05, 11, 16, 20, 26 and the
+# dev clean calls). The 20 held-out test scripts were NOT used to build or tune this list (plan.md Section 9.3).
+# strength: strong = almost always a violation; weak = a candidate the LLM must judge.
+# lang: hinglish | marathi | both. Patterns are matched on normalised text with punctuation removed.
+# Speaker-role scoring: hits on agent_patterns add to a speaker's agent score, hits on borrower_patterns subtract.
+rule: roles
+agent_patterns:
+  - { text: "sahyog", lang: both }
+  - { text: "सहयोग", lang: both }
+  - { text: "emi", lang: both }
+  - { text: "ईएमआई", lang: both }
+  - { text: "overdue", lang: both }
+  - { text: "pending", lang: both }
+  - { text: "payment", lang: both }
+  - { text: "loan number", lang: both }
+  - { text: "loan account", lang: both }
+  - { text: "bol raha hoon", lang: hinglish }
+  - { text: "bol rahi hoon", lang: hinglish }
+  - { text: "mera naam", lang: hinglish }
+  - { text: "calling from", lang: both }
+  - { text: "kab tak", lang: hinglish }
+  - { text: "ho payega", lang: hinglish }
+  - { text: "payment link", lang: both }
+  - { text: "late payment", lang: both }
+  - { text: "बोल रहा हूँ", lang: hinglish }
+  - { text: "बोल रही हूँ", lang: hinglish }
+  - { text: "बोलतोय", lang: marathi }
+  - { text: "बोलतेय", lang: marathi }
+  - { text: "हप्ता", lang: marathi }
+  - { text: "थकलेला", lang: marathi }
+  - { text: "थकलेले", lang: marathi }
+  - { text: "कधी भरू", lang: marathi }
+borrower_patterns:
+  - { text: "mere paas paisa nahi", lang: hinglish }
+  - { text: "paisa nahi", lang: hinglish }
+  - { text: "agle hafte", lang: hinglish }
+  - { text: "tankhwah", lang: hinglish }
+  - { text: "salary aane", lang: hinglish }
+  - { text: "thoda time", lang: hinglish }
+  - { text: "time dijiye", lang: hinglish }
+  - { text: "kar dunga", lang: hinglish }
+  - { text: "kar dungi", lang: hinglish }
+  - { text: "bhool gaya", lang: hinglish }
+  - { text: "bhool gayi", lang: hinglish }
+  - { text: "tight chal raha", lang: hinglish }
+  - { text: "बाद में कर दूंगा", lang: hinglish }
+  - { text: "अगले हफ्ते", lang: hinglish }
+  - { text: "पैसे नहीं", lang: hinglish }
+  - { text: "पगार", lang: marathi }
+  - { text: "वेळ द्या", lang: marathi }
+  - { text: "करतो", lang: marathi }
+  - { text: "भरतो", lang: marathi }
+  - { text: "भरते", lang: marathi }

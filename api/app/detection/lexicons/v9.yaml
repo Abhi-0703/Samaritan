@@ -1,0 +1,26 @@
+# Seeds from plan.md Appendix B plus phrases from the dev-split scripts only (calls 02, 05, 11, 16, 20, 26 and the
+# dev clean calls). The 20 held-out test scripts were NOT used to build or tune this list (plan.md Section 9.3).
+# strength: strong = almost always a violation; weak = a candidate the LLM must judge.
+# lang: hinglish | marathi | both. Patterns are matched on normalised text with punctuation removed.
+rule: V9
+patterns:
+  - { regex: "(abhi ke abhi|अभी के अभी).*(warna|varna|वरना|aakhri|आखिरी|last)", lang: hinglish, strength: strong }
+  - { regex: "(warna|varna|वरना).*(bura|बुरा)", lang: hinglish, strength: strong }
+  - { regex: "(आत्ताच्या आत्ता).*(नाहीतर|शेवटची)", lang: marathi, strength: strong }
+  - { text: "abhi ke abhi", lang: hinglish, strength: weak }
+  - { text: "अभी के अभी", lang: hinglish, strength: weak }
+  - { text: "warna", lang: hinglish, strength: weak }
+  - { text: "varna", lang: hinglish, strength: weak }
+  - { text: "वरना", lang: hinglish, strength: weak }
+  - { text: "last warning", lang: both, strength: weak }
+  - { text: "aakhri mauka", lang: hinglish, strength: weak }
+  - { text: "आखिरी मौका", lang: hinglish, strength: weak }
+  - { text: "dekh lena", lang: hinglish, strength: weak }
+  - { text: "देख लेना", lang: hinglish, strength: weak }
+  - { text: "nahitar", lang: marathi, strength: weak }
+  - { text: "नाहीतर", lang: marathi, strength: weak }
+  - { text: "आत्ताच्या आत्ता", lang: marathi, strength: weak }
+  - { text: "शेवटची वेळ", lang: marathi, strength: weak }
+  - { text: "aaj hi", lang: hinglish, strength: weak }
+  - { text: "turant", lang: hinglish, strength: weak }
+  - { text: "immediately", lang: both, strength: weak }

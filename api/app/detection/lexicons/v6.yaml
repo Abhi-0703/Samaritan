@@ -1,0 +1,17 @@
+# Seeds from plan.md Appendix B plus phrases from the dev-split scripts only (calls 02, 05, 11, 16, 20, 26 and the
+# dev clean calls). The 20 held-out test scripts were NOT used to build or tune this list (plan.md Section 9.3).
+# strength: strong = almost always a violation; weak = a candidate the LLM must judge.
+# lang: hinglish | marathi | both. Patterns are matched on normalised text with punctuation removed.
+# V6 is judged mostly by the LLM: there is no reliable keyword for "spoke to the wrong person". These are weak hints only.
+rule: V6
+patterns:
+  - { text: "unka loan", lang: hinglish, strength: weak }
+  - { text: "unke loan", lang: hinglish, strength: weak }
+  - { text: "unki emi", lang: hinglish, strength: weak }
+  - { text: "unhone loan", lang: hinglish, strength: weak }
+  - { text: "aapke bete ka loan", lang: hinglish, strength: weak }
+  - { text: "unhe bata dena ki loan", lang: hinglish, strength: weak }
+  - { text: "unke naam par loan", lang: hinglish, strength: weak }
+  - { regex: "\\b(ne loan liya|ka loan overdue|ki emi nahi|ki emi pending)\\b", lang: hinglish, strength: weak }
+  - { text: "त्यांचं कर्ज", lang: marathi, strength: weak }
+  - { text: "त्यांनी कर्ज", lang: marathi, strength: weak }

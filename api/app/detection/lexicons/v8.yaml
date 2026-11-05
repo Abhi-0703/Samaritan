@@ -1,0 +1,20 @@
+# Seeds from plan.md Appendix B plus phrases from the dev-split scripts only (calls 02, 05, 11, 16, 20, 26 and the
+# dev clean calls). The 20 held-out test scripts were NOT used to build or tune this list (plan.md Section 9.3).
+# strength: strong = almost always a violation; weak = a candidate the LLM must judge.
+# lang: hinglish | marathi | both. Patterns are matched on normalised text with punctuation removed.
+# V8 (introduction) is checked by presence. An introduction needs a self-introduction pattern AND a lender alias,
+# both within the first 60 seconds of agent speech. Lender aliases come from app/config/workspace.yaml.
+rule: V8
+intro_patterns:
+  - { regex: "\\b(main|mai|mein)\\b.*\\b(bol raha|bol rahi|bol rha|bol rhi|baat kar raha|baat kar rahi)\\b", lang: hinglish }
+  - { regex: "\\b(mera|meraa|mera)\\s+(naam|name)\\b", lang: hinglish }
+  - { regex: "\\bmy name is\\b", lang: both }
+  - { regex: "\\bcalling from\\b", lang: both }
+  - { regex: "\\bagent id\\b", lang: both }
+  - { regex: "\\bse bol (raha|rahi)\\b", lang: hinglish }
+  - { regex: "(मैं|मै).*(बोल रहा|बोल रही)", lang: hinglish }
+  - { regex: "मेरा\\s+नाम", lang: hinglish }
+  - { regex: "से\\s+बोल\\s+(रहा|रही)", lang: hinglish }
+  - { regex: "मी\\s+.*(बोलतोय|बोलतेय|बोलत आहे|बोलतो|बोलते)", lang: marathi }
+  - { regex: "(माझं|माझे|माझ)\\s+नाव", lang: marathi }
+  - { regex: "(कडून|मधून)\\s+(बोलतोय|बोलतेय|बोलत)", lang: marathi }

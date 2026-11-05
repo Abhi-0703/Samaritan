@@ -1,0 +1,51 @@
+# Seeds from plan.md Appendix B plus phrases from the dev-split scripts only (calls 02, 05, 11, 16, 20, 26 and the
+# dev clean calls). The 20 held-out test scripts were NOT used to build or tune this list (plan.md Section 9.3).
+# strength: strong = almost always a violation; weak = a candidate the LLM must judge.
+# lang: hinglish | marathi | both. Patterns are matched on normalised text with punctuation removed.
+rule: V2
+patterns:
+  # profanity and slurs (Hindi), Latin and Devanagari
+  - { text: "madarchod", lang: both, strength: strong }
+  - { text: "मादरचोद", lang: both, strength: strong }
+  - { text: "behenchod", lang: both, strength: strong }
+  - { text: "बहनचोद", lang: both, strength: strong }
+  - { text: "bhosdike", lang: both, strength: strong }
+  - { text: "bhosdi", lang: both, strength: strong }
+  - { text: "भोसड़ी", lang: both, strength: strong }
+  - { text: "chutiya", lang: both, strength: strong }
+  - { text: "chutiye", lang: both, strength: strong }
+  - { text: "चूतिया", lang: both, strength: strong }
+  - { text: "gandu", lang: both, strength: strong }
+  - { text: "गांडू", lang: both, strength: strong }
+  - { text: "randi", lang: both, strength: strong }
+  - { text: "रंडी", lang: both, strength: strong }
+  - { text: "haramzada", lang: both, strength: strong }
+  - { text: "हरामज़ादा", lang: both, strength: strong }
+  - { text: "haramkhor", lang: both, strength: strong }
+  - { text: "हरामखोर", lang: both, strength: strong }
+  - { text: "harami", lang: both, strength: strong }
+  - { text: "हरामी", lang: both, strength: strong }
+  - { text: "kutte ki", lang: both, strength: strong }
+  - { text: "कुत्ते", lang: both, strength: strong }
+  # insults that need context (quoting the borrower or "chor" in a figure of speech)
+  - { text: "chor", lang: both, strength: weak }
+  - { text: "चोर", lang: both, strength: weak }
+  - { text: "bewakoof", lang: both, strength: weak }
+  - { text: "बेवकूफ", lang: both, strength: weak }
+  - { text: "nalayak", lang: both, strength: weak }
+  - { text: "नालायक", lang: both, strength: weak }
+  - { text: "dhokhebaaz", lang: both, strength: weak }
+  - { text: "धोखेबाज", lang: both, strength: weak }
+  - { text: "fraud", lang: both, strength: weak }
+  - { text: "kamina", lang: both, strength: weak }
+  - { text: "kamine", lang: both, strength: weak }
+  - { text: "कमीना", lang: both, strength: weak }
+  - { text: "idiot", lang: both, strength: weak }
+  - { text: "stupid", lang: both, strength: weak }
+  - { text: "jhootha", lang: both, strength: weak }
+  - { text: "झूठा", lang: both, strength: weak }
+  # Marathi
+  - { text: "मूर्ख", lang: marathi, strength: weak }
+  - { text: "बावळट", lang: marathi, strength: weak }
+  - { text: "लबाड", lang: marathi, strength: weak }
+  - { text: "नालायक", lang: marathi, strength: weak }

@@ -1,0 +1,35 @@
+# Seeds from plan.md Appendix B plus phrases from the dev-split scripts only (calls 02, 05, 11, 16, 20, 26 and the
+# dev clean calls). The 20 held-out test scripts were NOT used to build or tune this list (plan.md Section 9.3).
+# strength: strong = almost always a violation; weak = a candidate the LLM must judge.
+# lang: hinglish | marathi | both. Patterns are matched on normalised text with punctuation removed.
+rule: V3
+patterns:
+  - { regex: "(haath|hath|hat)\\s*(pair|per|pav)\\s*(tod|toad)", lang: both, strength: strong }
+  - { regex: "(ghar|ghar)\\s*(pe|par|aake|aakar|aa kar)\\s+.*\\b(tod|maar|pit|utha)", lang: hinglish, strength: strong }
+  - { regex: "(हाथ|हात)\\s*(पैर|पाय)\\s*तोड", lang: both, strength: strong }
+  - { regex: "(घर|घरी)\\s*(पर|पे|येऊन|आकर)\\s+.*(तोड|मार|पीट)", lang: both, strength: strong }
+  - { text: "recovery wale", lang: hinglish, strength: weak }
+  - { text: "recovery wale bhej", lang: hinglish, strength: strong }
+  - { text: "ghar aake", lang: hinglish, strength: weak }
+  - { text: "ghar pe aa", lang: hinglish, strength: weak }
+  - { text: "ghar par aa", lang: hinglish, strength: weak }
+  - { text: "dekh lenge", lang: hinglish, strength: weak }
+  - { text: "dekh lunga", lang: hinglish, strength: weak }
+  - { text: "todenge", lang: hinglish, strength: weak }
+  - { text: "tod denge", lang: hinglish, strength: weak }
+  - { text: "tod dunga", lang: hinglish, strength: weak }
+  - { text: "goonde", lang: both, strength: weak }
+  - { text: "gunde", lang: both, strength: weak }
+  - { text: "utha le", lang: hinglish, strength: weak }
+  - { text: "utha ke", lang: hinglish, strength: weak }
+  - { text: "maar denge", lang: hinglish, strength: weak }
+  - { text: "pitai", lang: hinglish, strength: weak }
+  - { text: "घर आकर", lang: hinglish, strength: weak }
+  - { text: "घर पे आ", lang: hinglish, strength: weak }
+  - { text: "देख लेंगे", lang: hinglish, strength: weak }
+  - { text: "तोड़", lang: hinglish, strength: weak }
+  - { text: "गुंडे", lang: both, strength: weak }
+  - { text: "घरी येऊन", lang: marathi, strength: weak }
+  - { text: "बघून घेऊ", lang: marathi, strength: weak }
+  - { text: "तोडू", lang: marathi, strength: weak }
+  - { text: "मारू", lang: marathi, strength: weak }
