@@ -1,0 +1,20 @@
+# The fictional lender used by the demo and the test set.
+workspace_name: Sahyog Finance
+team_name: Collections QA
+lender_name: Sahyog Finance
+# Spellings a transcript may use for the lender. Matching is done on normalised text, in both scripts.
+lender_aliases:
+  - Sahyog Finance
+  - Sahyog Fin
+  - Sahyog
+  - Sahayog Finance
+  - Sahayog
+  - Sahyog Financial
+  - सहयोग फायनान्स
+  - सहयोग फाइनेंस
+  - सहयोग फाइनान्स
+  - सहयोग फ़ाइनेंस
+  - सहयोग
+default_agent_team: Collections
+# Run V8 over agent speech in this many seconds from the start of the call.
+introduction_window_s: 60

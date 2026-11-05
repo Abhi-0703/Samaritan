@@ -1,0 +1,8 @@
+# Scoring (plan.md Section 5.3): each call starts at base and loses points per non-dismissed
+# violation of an enabled rule. Agent score is the mean of their call scores.
+base: 100
+floor: 0
+deductions:
+  critical: 30
+  high: 15
+  medium: 5

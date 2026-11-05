@@ -36,3 +36,6 @@ coverage/
 
 # Agent tooling
 .claude/
+
+# Python packaging
+*.egg-info/

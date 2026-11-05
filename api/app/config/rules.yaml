@@ -1,0 +1,138 @@
+# Single source for the nine rules: seeds the `rules` table and feeds the LLM prompt.
+# `flag_when` and `do_not_flag_when` are plan.md Section 5.1 verbatim.
+# RBI references are drafts (see docs/rbi-references.md); every one stays marked until verified.
+rules:
+  - code: V1
+    name: Call outside permitted hours
+    severity: high
+    detection: metadata
+    description: >-
+      The call started before 08:00 or after 19:00 IST and the borrower did not ask for that time.
+      08:00 and 19:00 themselves are allowed.
+    flag_when: >-
+      Call start time (IST) is before 08:00 or after 19:00 and borrower_requested_time is false.
+      08:00 and 19:00 themselves are allowed.
+    do_not_flag_when: Inside the window; or the borrower asked for that time.
+    rbi_reference: >-
+      RBI/2022-23/108 (12 Aug 2022), recovery agents: no calls before 08:00 or after 19:00.
+      Borrower-requested times: 2026 amendment RBI/2026-27/230. Clause: [to verify]
+  - code: V2
+    name: Abusive or insulting language
+    severity: critical
+    detection: rules+llm
+    description: >-
+      Profanity, slurs, name-calling or demeaning remarks directed at the borrower or their family.
+      Quoting the borrower, firm but civil language and stating lawful consequences are not flagged.
+    flag_when: >-
+      Profanity, slurs, name-calling or demeaning remarks directed at the borrower or their family
+      (for example calling them a thief, useless, fraud).
+    do_not_flag_when: Agent quoting the borrower; firm but civil language; stating lawful consequences.
+    rbi_reference: >-
+      RBI/2022-23/108 (12 Aug 2022), recovery agents, and Responsible Business Conduct Directions: no
+      intimidation or harassment, including abusive language. Clause: [to verify]
+  - code: V3
+    name: Threat of physical harm or force
+    severity: critical
+    detection: rules+llm
+    description: >-
+      A threat to harm, to send muscle, to seize property by force, or a menacing visit at home.
+      A courteous notice that an executive may visit in permitted hours is not flagged.
+    flag_when: >-
+      Threat to harm, to send "recovery boys" or muscle, to seize property by force, or menacing
+      "we'll see you at home".
+    do_not_flag_when: >-
+      A courteous notice that an executive may visit during permitted hours; mention of lawful
+      recovery processes.
+    rbi_reference: >-
+      Responsible Business Conduct Directions: no use of force; harsh recovery methods prohibited
+      (para 100Z reported in the 2026 amendment). Clause: [to verify]
+  - code: V4
+    name: False legal threat
+    severity: critical
+    detection: rules+llm
+    description: >-
+      Claiming arrest, jail, FIR, warrant or police action as an imminent consequence of an ordinary
+      default. Neutral mention of a legal notice or credit-bureau reporting is not flagged.
+    flag_when: >-
+      Claiming arrest, jail, FIR, warrant or police action as an imminent consequence of an ordinary
+      loan default; unrealistic legal deadlines ("police will be at your door tomorrow").
+    do_not_flag_when: >-
+      Neutral mention that the lender may send a legal notice or pursue recovery through due legal
+      process; mention of credit-bureau reporting.
+    rbi_reference: >-
+      Responsible Business Conduct Directions: no threats of unlawful action or misleading the
+      borrower about the debt. Clause: [to verify]
+  - code: V5
+    name: Public shaming or threat to inform others
+    severity: high
+    detection: rules+llm
+    description: >-
+      Threatening to tell the borrower's employer, colleagues, neighbours, relatives or society about
+      the debt, or to publish their name or photo.
+    flag_when: >-
+      Threatening to tell the borrower's employer, colleagues, neighbours, relatives, society or
+      social media about the debt, or to publish their name or photo.
+    do_not_flag_when: Asking the borrower to confirm their own contact details.
+    rbi_reference: >-
+      Responsible Business Conduct Directions: no public shaming, and no harassing relatives, friends
+      or colleagues. Clause: [to verify]
+  - code: V6
+    name: Debt disclosed to a third party
+    severity: high
+    detection: llm
+    description: >-
+      Revealing loan, amount or default details to someone who is not the borrower. Asking a third
+      party to pass on a call-back request without disclosing the debt is not flagged.
+    flag_when: >-
+      Revealing loan, amount or default details to someone who is not the borrower (for example a
+      relative or colleague who answered the phone).
+    do_not_flag_when: >-
+      Asking a third party to pass on a call-back request WITHOUT disclosing the debt; speaking with
+      a co-borrower or guarantor.
+    rbi_reference: >-
+      Fair Practices Code: borrower information stays confidential. Source not yet identified.
+      Clause: [to verify]
+  - code: V7
+    name: Impersonation or false authority
+    severity: critical
+    detection: rules+llm
+    description: >-
+      Claiming to be police, court, advocate, government, RBI or CBI; falsely claiming a notice or
+      case exists; materially false statements about the loan.
+    flag_when: >-
+      Claiming to be police, court, advocate, government, RBI or CBI; falsely claiming a legal notice
+      or case already exists; materially false statements about the loan or its consequences.
+    do_not_flag_when: Truthfully stating the agent's own role and the lender's name.
+    rbi_reference: >-
+      Responsible Business Conduct Directions: no misleading the borrower about the debt or the
+      caller's authority. Clause: [to verify]
+  - code: V8
+    name: No self or lender identification
+    severity: medium
+    detection: rules+llm
+    description: >-
+      In the first 60 seconds the agent does not state both their own name (or agent ID) and the
+      lender's name.
+    flag_when: >-
+      Within the first 60 seconds the agent does not state BOTH their own name (or agent ID) AND the
+      lender's name.
+    do_not_flag_when: Both are stated at any point in the first 60 seconds.
+    rbi_reference: >-
+      Digital Lending Directions and the 2026 amendment: the borrower is told the recovery agency's
+      details before contact. Clause: [to verify]
+  - code: V9
+    name: Undue pressure or intimidation
+    severity: medium
+    detection: rules+llm
+    description: >-
+      Ultimatums with menace, manufactured urgency, guilt-tripping through family, or repeated
+      insistence after the borrower clearly states an inability to pay.
+    flag_when: >-
+      Ultimatums with menace ("pay right now or else"), manufactured urgency, guilt-tripping through
+      family, ignoring a clearly stated inability to pay with repeated insistence.
+    do_not_flag_when: >-
+      Firm but polite reminders, asking for a payment date, offering options, stating due date and
+      fees per the agreement.
+    rbi_reference: >-
+      RBI/2022-23/108 (12 Aug 2022), recovery agents: no persistent calling, intimidation or
+      harassment. Clause: [to verify]
