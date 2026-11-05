@@ -21,6 +21,7 @@ def isolated_env(tmp_path, monkeypatch):
     monkeypatch.setenv("UPLOAD_PASSCODE", "")
     monkeypatch.setenv("ADMIN_TOKEN", "test-admin-token")
     monkeypatch.setenv("LLM_CACHE", "on")
+    monkeypatch.setenv("WORKER_ENABLED", "false")  # tests drain the queue themselves
     get_settings.cache_clear()
     get_storage.cache_clear()
     yield
@@ -41,3 +42,50 @@ def session():
         seed_rules(s)
     with db_module.session_factory()() as s:
         yield s
+
+
+@pytest.fixture
+def gnani_fake():
+    from tests.fakes.gnani_fake import FakeGnani
+
+    return FakeGnani(api_key="test-gnani-key-0000")
+
+
+@pytest.fixture
+def llm_fake():
+    from tests.fakes.llm_fake import FakeProvider, answer
+
+    return FakeProvider(responses=[answer()])
+
+
+@pytest.fixture
+def runtime(session, gnani_fake, llm_fake):
+    """Everything the app needs, with fakes in place of Gnani and the LLM."""
+    from app.detection.llm_judge import PROMPT_VERSION
+    from app.runtime import Runtime, make_worker
+    from app.services.gnani_client import GnaniBatchClient
+    from app.services.llm.cache import DbLlmCache
+    from app.services.llm.limiter import TokenLimiter
+    from app.services.llm.service import LLMService
+    from app.storage import get_storage
+
+    settings = get_settings()
+    gnani = GnaniBatchClient(
+        "https://api.vachana.ai", "test-gnani-key-0000", http=gnani_fake.client(), sleep=lambda s: None
+    )
+    llm = LLMService(
+        llm_fake, None, {llm_fake.name: TokenLimiter(1000, 10_000_000, sleep=lambda s: None)},
+        DbLlmCache(db_module.session_scope, settings.llm_cache), PROMPT_VERSION, sleep=lambda s: None,
+    )  # fmt: skip
+    storage = get_storage()
+    return Runtime(settings, gnani, llm, storage, make_worker(settings, gnani, llm, storage))
+
+
+@pytest.fixture
+def client(runtime):
+    from fastapi.testclient import TestClient
+
+    from app.main import create_app
+
+    with TestClient(create_app(lambda s: runtime)) as c:
+        yield c

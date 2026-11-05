@@ -1,11 +1,11 @@
 # progress.md
-Last updated: 2026-11-05 | Phase: 1 complete, Phase 2 not started | Step: waiting for Phase 2 inputs
+Last updated: 2026-11-06 | Phase: 2 in progress | Step: 2.6 done, 2.7 evaluation harness next
 
 ## Status
-Phases 0 and 1 are approved by the user (scripts confirmed actable; Phase 1 design "looks right"). Python 3.11 and ffmpeg are installed. RBI references are drafted but unverified. Phase 2 (FastAPI backend, Gnani, LLM, detection, evaluation) has not started. The user has put the Gnani, Groq and Gemini keys in `api/.env` (all three verified working). Pricing is known: STT is Rs 20 per hour, so the whole plan costs about 25 credits. Deadline: 2026-11-10 23:59 IST.
+Phases 0 and 1 approved. Phase 2 steps 2.1 to 2.6 are built and unit-tested against fakes (317 tests, ruff clean): API skeleton and models, Gnani batch client with a fake server, audio prep, Layer 1 detection, LLM layer and judge, then pipeline, worker and all endpoints. No real Gnani call has been made and `data/audio/` is empty. Keys for Gnani, Groq and Gemini are in `api/.env` (Gemini model `gemini-3.5-flash`, D-017). Deadline: 2026-11-10 23:59 IST.
 
 ## Next action
-When the user supplies the Phase 2 inputs (at least the Gnani key in `api/.env`, Groq and Gemini keys and model names), start Phase 2.1: create `api/` with `python3.11 -m venv`, FastAPI skeleton, config, error envelope, SQLAlchemy models, Alembic migration, 9 seeded rules, local storage. Work that needs no keys (2.1 to 2.4, fake Gnani server, audio prep) may start before the keys arrive.
+Build step 2.7: `api/eval/` (`metrics.py`, `run_eval.py`, `label_times.py`), `GET /eval/latest` and `POST /eval/run` (admin token plus demo guard), with unit tests for the metric maths. Then stop and ask the user before any real Gnani transcription (2.8).
 
 ## Completed
 - Phase 0: repo skeleton, 30 scripts, 30 answer keys, COVERAGE.md, RECORDING_GUIDE.md. User confirmed the scripts are actable. Verified by `python3 scripts/check_testset.py` (scripts and keys agree; all Section 9.1 totals met).
@@ -15,6 +15,7 @@ When the user supplies the Phase 2 inputs (at least the Gnani key in `api/.env`,
 - Contrast measured for the main colour pairs in both themes; all at 4.5:1 or better after the dark-mode fixes (D-009).
 
 ## In progress / unverified
+- Everything in Phase 2 ran only against fakes. Real Gnani output (speaker ids, timestamps, Marathi text) and real LLM verdicts on the 30 calls are unverified; Layer 1 lexicons were tuned on dev scripts only (D-018).
 - Not exercised: swap-roles button, "Fill from CSV", the passcode dialog (only the stored-passcode path ran), keyboard-only walkthrough, screen-reader pass, actual print preview of the evidence page, real audio playback sound (visual seek and progress verified), Marathi call detail page, Agents/Rules/Evidence in dark.
 - Dev server logged one React hydration warning that was fixed (nav link class); a final clean reload of every route for console errors was not done.
 - Placeholder audio is synthetic tones, so the waveform does not look like speech.
@@ -22,7 +23,8 @@ When the user supplies the Phase 2 inputs (at least the Gnani key in `api/.env`,
 - All numbers on the Accuracy page are sample data from the mock client, not measurements.
 
 ## Waiting on the user
-- Permission before the first real transcription (the spike) and, later, the full 30-call run. Keys are in `api/.env`; credits are no longer a question (D-016). Gemini model: recommended `gemini-2.5-flash`, not yet written to `.env`.
+- Permission before the first real transcription (the spike) and, later, the full 30-call run. Credits are no longer a question (D-016).
+- Tell the user my earlier `gemini-2.5-flash` advice was wrong (404); `gemini-3.5-flash` is set and tested (D-017).
 - RBI source PDFs saved under `docs/rbi-sources/`, or pasted paragraphs, to verify clause numbers (D-014).
 - Recordings in `data/audio/`: 0 of 30 (user and friend both speak Marathi; separate-channel recording is possible for 1 or 2 calls).
 
@@ -30,6 +32,7 @@ When the user supplies the Phase 2 inputs (at least the Gnani key in `api/.env`,
 - `Gnani/` is the repo root (D-001). Test-set conventions: D-002 to D-007.
 - next-themes replaced by a small provider (React 19 script error) (D-008). Dark filled buttons and accent text adjusted for AA (D-009).
 - Next.js 16.4.3 with Cache Components kept; dynamic-id pages use `instant = false` (D-010). shadcn is Base UI based; TanStack Table v9 core only (D-011).
+- Phase 2 choices: D-018 (LLM layer, merge, lexicon leakage), D-019 to D-022 (stored upload, swap-roles override, no open write transaction across the LLM call, demo guard).
 - Mock semantics the real API must match are listed in D-012 (percent vs fraction, 14-day critical count, V1 and V8 fields, passcode `demo123`).
 
 ## Deviations from plan.md
@@ -48,9 +51,10 @@ When the user supplies the Phase 2 inputs (at least the Gnani key in `api/.env`,
 - web: `cd web && npm install && cp .env.example .env.local && npm run dev` (http://localhost:3000)
 - checks: `cd web && npm run lint && npm run build`
 - test set: `python3 scripts/check_testset.py`; placeholder audio: `python3 scripts/make_placeholder_audio.py`
-- api: not built yet   tests: none yet
+- api: `cd api && source .venv/bin/activate && uvicorn app.main:app --reload` (needs `api/.env`); `python -m app.cli transcribe <audio> --dry-run` shows the plan without calling Gnani
+- tests: `cd api && .venv/bin/pytest && .venv/bin/ruff check .` (317 pass; no network, no credits)
 
 ## Environment (no secrets)
 - Gnani key: provided and verified (read-only list-jobs call returned 200)  LLM keys: Groq and Gemini provided and verified (model lists fetched)
-- Database: none (mock data in memory)   Deployed: no
+- Database: local SQLite via Alembic (`api/local.db`, git-ignored)   Deployed: no
 - Tools: node v24, npm 11, git 2.54, python3.11 3.11.18, ffmpeg 9.0.2

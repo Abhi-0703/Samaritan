@@ -54,6 +54,7 @@ class Settings(BaseSettings):
     upload_passcode: SecretStr = SecretStr("")
     admin_token: SecretStr = SecretStr("")
     cors_origins: str = "http://localhost:3000"
+    worker_enabled: bool = True  # tests turn the background thread off and drain the queue themselves
 
     @field_validator("llm_cache", mode="before")
     @classmethod

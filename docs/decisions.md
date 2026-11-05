@@ -79,3 +79,18 @@ Every [DECIDE] choice and every conflict between plan.md and reality is recorded
 - The env limits (`LLM_RPM_LIMIT`, `LLM_TPM_LIMIT`) apply to the primary provider; the fallback gets Gemini-sized defaults (10 requests and 200,000 tokens a minute).
 - The merge step collapses the same rule flagged on neighbouring segments into one violation (highest confidence, preferring `both`). plan.md does not say this; it avoids counting one threat twice as a false positive.
 - Layer 1 lexicons were seeded from plan Appendix B and the dev-split scripts only. The author of the lexicons had also written the held-out test scripts and had seen them, so some unconscious leakage is possible; the held-out numbers must be read with that in mind.
+
+## D-019 — Original upload is stored; conversion happens in the pipeline
+- **Context:** plan.md does not say whether the stored audio is the upload or the converted file Gnani receives.
+- **Decision:** the upload is validated at the endpoint and stored unchanged (the browser plays it back); `prepare_for_gnani` converts a temporary copy inside the pipeline, so a conversion bug never costs the original.
+
+## D-020 — Swap roles is a stored override, re-run without Gnani
+- `POST /calls/{id}/swap-roles` writes `agent_speaker_override` into `calls.analysis_meta` and re-runs `analyse_call` on the cached transcript. The override survives re-analysis. Reviewer decisions are kept across re-analysis by matching rule and segment index.
+
+## D-021 — No write transaction across an LLM call
+- **Context:** the LLM cache writes through its own session. The pipeline held an open write transaction (the agent speaker id) when the judge ran, so on SQLite the cache insert waited 30 s and failed with "database is locked".
+- **Decision:** `analyse_call` commits before the judge runs. A test (`test_pipeline.py`) exercises this path with the real cache.
+
+## D-022 — Demo guard and rate limit
+- The passcode and per-IP limit (10 requests an hour, in memory) protect upload, retry and swap-roles. With `DEMO_MODE=true` and no passcode configured every protected call is refused. The limiter resets on restart, which is acceptable for one small instance.
+

@@ -1,33 +1,43 @@
 from __future__ import annotations
 
+from collections.abc import Callable
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.config import get_settings
+from app.config import Settings, get_settings
 from app.db import init_db, session_scope
 from app.errors import register_error_handlers
+from app.guards import RateLimiter
 from app.logging_config import configure_logging
 from app.migrate import upgrade_to_head
+from app.routers import agents, calls, rules, stats, violations
+from app.runtime import Runtime, build_runtime
 from app.seed import seed_rules
 
 
-@asynccontextmanager
-async def lifespan(app: FastAPI):
+def create_app(runtime_factory: Callable[[Settings], Runtime] | None = None) -> FastAPI:
     settings = get_settings()
-    configure_logging(settings)
-    if settings.database_url.startswith("sqlite"):
-        upgrade_to_head()  # Postgres migrations are applied explicitly (Phase 3)
-    init_db()
-    with session_scope() as session:
-        seed_rules(session)
-    yield
 
+    @asynccontextmanager
+    async def lifespan(app: FastAPI):
+        configure_logging(settings)
+        if settings.database_url.startswith("sqlite"):
+            upgrade_to_head()  # Postgres migrations are applied explicitly (Phase 3)
+        init_db()
+        with session_scope() as session:
+            seed_rules(session)
+        runtime = (runtime_factory or build_runtime)(settings)
+        app.state.runtime = runtime
+        runtime.worker.resume_unfinished()  # free hosts sleep and restart: pick up unfinished calls
+        if settings.worker_enabled:
+            runtime.worker.start()
+        yield
+        runtime.worker.stop()
 
-def create_app() -> FastAPI:
-    settings = get_settings()
     app = FastAPI(title="Samaritan API", version="0.1.0", lifespan=lifespan)
+    app.state.rate_limiter = RateLimiter(limit=10, window_s=3600)
     app.add_middleware(
         CORSMiddleware,
         allow_origins=settings.cors_origin_list,
@@ -41,6 +51,8 @@ def create_app() -> FastAPI:
     def health() -> dict[str, str]:
         return {"status": "ok"}
 
+    for module in (calls, violations, agents, rules, stats):
+        app.include_router(module.router)
     return app
 
 

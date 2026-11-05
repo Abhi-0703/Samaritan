@@ -14,7 +14,7 @@ from app.config import get_settings
 def make_engine(url: str) -> Engine:
     kwargs: dict = {"pool_pre_ping": True}
     if url.startswith("sqlite"):
-        kwargs["connect_args"] = {"check_same_thread": False}
+        kwargs["connect_args"] = {"check_same_thread": False, "timeout": 30}  # the worker and requests share the file
     engine = create_engine(url, **kwargs)
     if url.startswith("sqlite"):
 
@@ -22,6 +22,7 @@ def make_engine(url: str) -> Engine:
         def _fk_on(dbapi_conn, _):  # SQLite ignores foreign keys unless asked
             cur = dbapi_conn.cursor()
             cur.execute("PRAGMA foreign_keys=ON")
+            cur.execute("PRAGMA journal_mode=WAL")  # readers do not block the worker
             cur.close()
 
     return engine

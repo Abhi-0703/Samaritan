@@ -12,9 +12,12 @@ class FakeProvider:
         self.name, self.model = name, model
         self.responses = list(responses or [])
         self.calls: list[tuple[str, str]] = []
+        self.on_call = None  # optional hook, called before each response
 
     def complete_json(self, system: str, user: str) -> LLMResponse:
         self.calls.append((system, user))
+        if self.on_call:
+            self.on_call()
         item = self.responses.pop(0) if len(self.responses) > 1 else self.responses[0]
         if isinstance(item, Exception):
             raise item

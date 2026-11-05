@@ -51,6 +51,8 @@ class FakeGnani:
         self.credits_exhausted = False
         self.scope_error = False
         self.accepted_models = {"prisma-v2.5", "prisma-v3.0"}
+        self.default_segments = DEFAULT_SEGMENTS
+        self.on_request = None  # optional hook: called with (method, path) before each request is handled
         self.job_error_message = "UNSUPPORTED_LANGUAGE: language not supported for this file"
 
     # -- helpers ------------------------------------------------------------------------------------
@@ -113,6 +115,8 @@ class FakeGnani:
     def handle(self, request: httpx.Request) -> httpx.Response:
         path = request.url.path
         self.requests.append((request.method, path))
+        if self.on_request:
+            self.on_request(request.method, path)
 
         if request.url.host == TRANSCRIPT_HOST:  # pre-signed URL: no key needed, and none must be sent
             self.transcript_request_headers.append(request.headers)
@@ -261,7 +265,7 @@ class FakeGnani:
         job = next((j for j in self.jobs.values() if j.file_id == file_id), None)
         if not job:
             return httpx.Response(403, text="expired")
-        segs = self.transcripts.get(job.filename, DEFAULT_SEGMENTS)
+        segs = self.transcripts.get(job.filename, self.default_segments)
         return self._json(
             200,
             {
