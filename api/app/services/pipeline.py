@@ -11,6 +11,7 @@ import logging
 import tempfile
 import time
 import uuid
+from dataclasses import dataclass
 from datetime import UTC, datetime
 from pathlib import Path
 
@@ -22,7 +23,7 @@ from app.detection.llm_judge import PROMPT_VERSION, judge_call
 from app.detection.masking import mask_pii
 from app.detection.merge import merge_flags
 from app.detection.roles import RoleMapping, map_roles
-from app.detection.rules_engine import run_layer1
+from app.detection.rules_engine import Layer1Result, run_layer1
 from app.detection.types import DSegment
 from app.models import Call, Segment, Violation
 from app.services import audio
@@ -85,12 +86,38 @@ def transcribe_call(
 # ---- stage 2: analysis (also used by swap-roles and re-analysis) -------------------------------------------------
 
 
-def _roles_for(call: Call, transcript, override: int | None) -> RoleMapping:
-    mapping = map_roles([(s.speaker_id, s.start_s, s.text) for s in transcript.segments])
+@dataclass
+class Prepared:
+    """Everything before the LLM: roles, masked segments, Layer 1. Shared with the evaluation harness."""
+
+    segments: list[DSegment]
+    roles: RoleMapping
+    layer1: Layer1Result
+
+
+def prepare(
+    raw_transcript: dict,
+    language: str,
+    called_at: datetime,
+    borrower_requested_time: bool,
+    enabled: set[str],
+    agent_speaker_override: int | None = None,
+) -> Prepared:
+    transcript = parse_transcript(raw_transcript)
+    roles = map_roles([(s.speaker_id, s.start_s, s.text) for s in transcript.segments])
     ids = sorted({s.speaker_id for s in transcript.segments if s.speaker_id is not None})
-    if override is not None and override in ids and len(ids) >= 2:
-        return RoleMapping(override, {i: ("agent" if i == override else "borrower") for i in ids}, mapping.scores)
-    return mapping
+    if agent_speaker_override is not None and agent_speaker_override in ids and len(ids) >= 2:
+        roles = RoleMapping(
+            agent_speaker_override,
+            {i: ("agent" if i == agent_speaker_override else "borrower") for i in ids},
+            roles.scores,
+        )
+    segments = [
+        DSegment(i, roles.label(s.speaker_id), s.start_s, s.end_s, mask_pii(s.text).text)  # type: ignore[arg-type]
+        for i, s in enumerate(transcript.segments)
+    ]  # masked before anything is stored or sent to an LLM
+    layer1 = run_layer1(segments, language, called_at, borrower_requested_time, enabled)
+    return Prepared(segments, roles, layer1)
 
 
 def analyse_call(session: Session, call: Call, llm: LLMService | None) -> None:
@@ -99,17 +126,13 @@ def analyse_call(session: Session, call: Call, llm: LLMService | None) -> None:
         raise ValueError("The call has no transcript to analyse.")
     started = time.monotonic()
     _set_status(session, call, "analysing")
-    transcript = parse_transcript(call.raw_transcript)
     override = (call.analysis_meta or {}).get("agent_speaker_override")
-    roles = _roles_for(call, transcript, override)
-    call.agent_speaker_id = roles.agent_speaker_id
-
-    dsegs = [
-        DSegment(i, roles.label(s.speaker_id), s.start_s, s.end_s, mask_pii(s.text).text)  # type: ignore[arg-type]
-        for i, s in enumerate(transcript.segments)
-    ]  # masked before anything is stored or sent to an LLM
     enabled = enabled_codes(session)
-    layer1 = run_layer1(dsegs, call.language, call.called_at, call.borrower_requested_time, enabled)
+    prepared = prepare(
+        call.raw_transcript, call.language, call.called_at, call.borrower_requested_time, enabled, override
+    )
+    dsegs, roles, layer1 = prepared.segments, prepared.roles, prepared.layer1
+    call.agent_speaker_id = roles.agent_speaker_id
 
     judge = None
     session.commit()  # no write transaction may stay open across the LLM call: the cache writes through its own session

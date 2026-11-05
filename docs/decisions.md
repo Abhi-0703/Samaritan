@@ -94,3 +94,10 @@ Every [DECIDE] choice and every conflict between plan.md and reality is recorded
 ## D-022 — Demo guard and rate limit
 - The passcode and per-IP limit (10 requests an hour, in memory) protect upload, retry and swap-roles. With `DEMO_MODE=true` and no passcode configured every protected call is refused. The limiter resets on restart, which is acceptable for one small instance.
 
+## D-023 — Evaluation code lives in the API package
+- **Context:** plan.md puts `metrics.py`, `run_eval.py` and `label_times.py` in a top-level `eval/` folder, but `POST /eval/run` must call the same code.
+- **Decision:** the logic is in `api/app/evaluation/` (keys, metrics, runner, report, labelling, ingest, cli). `eval/run_eval.py` and `eval/label_times.py` are thin wrappers that put `api/` on the path; reports go to `eval/reports/`. Run them with the API's virtualenv.
+- **Details:** `rules_only` and `rules_plus_llm` use the same cached transcripts and always have all nine rules enabled, whatever a reviewer toggled. V1 is judged from the answer key's time of day on the call's own date. If the LLM is unreachable for any call, `rules_plus_llm` is not recorded (a half rules-only run would flatter or punish it falsely) and the report says so. Undefined ratios (nothing predicted, nothing expected) are 0.0 and the report prints "n/a".
+- **Role-mapping truth:** answer keys have no speaker labels. `label_times.py` can add `agent_speaker_id` to a key (optional field, like D-002). Until labelled, the truth is "the first speaker is the agent", because every script opens with the agent; the report states which basis was used. This is partly the same signal the heuristic uses, so treat unlabelled role accuracy as optimistic.
+- **Ingest:** `python eval/run_eval.py ingest` registers `data/audio/call_NN.*` as test calls (agent and loan reference from the script header, dated yesterday at the key's time) and asks before sending anything to Gnani, showing minutes and the credit estimate.
+

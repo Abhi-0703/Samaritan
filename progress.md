@@ -1,11 +1,11 @@
 # progress.md
-Last updated: 2026-11-06 | Phase: 2 in progress | Step: 2.6 done, 2.7 evaluation harness next
+Last updated: 2026-11-06 | Phase: 2 in progress | Step: 2.7 done; 2.8 needs recordings and your OK
 
 ## Status
-Phases 0 and 1 approved. Phase 2 steps 2.1 to 2.6 are built and unit-tested against fakes (317 tests, ruff clean): API skeleton and models, Gnani batch client with a fake server, audio prep, Layer 1 detection, LLM layer and judge, then pipeline, worker and all endpoints. No real Gnani call has been made and `data/audio/` is empty. Keys for Gnani, Groq and Gemini are in `api/.env` (Gemini model `gemini-3.5-flash`, D-017). Deadline: 2026-11-10 23:59 IST.
+Phases 0 and 1 approved. Phase 2 steps 2.1 to 2.7 are built and unit-tested against fakes (364 tests, ruff clean): API skeleton and models, Gnani batch client with a fake server, audio prep, Layer 1 detection, LLM layer and judge, pipeline, worker, all endpoints, and the evaluation harness (metrics, runner, report, ingest, time-labelling, `GET /eval/latest`, `POST /eval/run`). No real Gnani call has been made and `data/audio/` is empty. Keys for Gnani, Groq and Gemini are in `api/.env` (Gemini model `gemini-3.5-flash`, D-017). Deadline: 2026-11-10 23:59 IST.
 
 ## Next action
-Build step 2.7: `api/eval/` (`metrics.py`, `run_eval.py`, `label_times.py`), `GET /eval/latest` and `POST /eval/run` (admin token plus demo guard), with unit tests for the metric maths. Then stop and ask the user before any real Gnani transcription (2.8).
+Step 2.8: when the user has put the first recordings in `data/audio/` (call_01, call_10, call_05, call_02, call_16), run `python eval/run_eval.py ingest --only call_01 call_10 call_05 call_02 call_16` from the repo root with `api/.venv/bin/python`; it prints minutes and credit cost and asks before calling Gnani. Then run the spike configs (`python -m app.cli transcribe`), `run`, and report real numbers. Ask the user first; nothing real has been sent to Gnani yet.
 
 ## Completed
 - Phase 0: repo skeleton, 30 scripts, 30 answer keys, COVERAGE.md, RECORDING_GUIDE.md. User confirmed the scripts are actable. Verified by `python3 scripts/check_testset.py` (scripts and keys agree; all Section 9.1 totals met).
@@ -32,7 +32,7 @@ Build step 2.7: `api/eval/` (`metrics.py`, `run_eval.py`, `label_times.py`), `GE
 - `Gnani/` is the repo root (D-001). Test-set conventions: D-002 to D-007.
 - next-themes replaced by a small provider (React 19 script error) (D-008). Dark filled buttons and accent text adjusted for AA (D-009).
 - Next.js 16.4.3 with Cache Components kept; dynamic-id pages use `instant = false` (D-010). shadcn is Base UI based; TanStack Table v9 core only (D-011).
-- Phase 2 choices: D-018 (LLM layer, merge, lexicon leakage), D-019 to D-022 (stored upload, swap-roles override, no open write transaction across the LLM call, demo guard).
+- Phase 2 choices: D-018 (LLM layer, merge, lexicon leakage), D-019 to D-022 (stored upload, swap-roles override, no open write transaction across the LLM call, demo guard), D-023 (evaluation code in `api/app/evaluation`, role-mapping truth, ingest).
 - Mock semantics the real API must match are listed in D-012 (percent vs fraction, 14-day critical count, V1 and V8 fields, passcode `demo123`).
 
 ## Deviations from plan.md
@@ -52,7 +52,8 @@ Build step 2.7: `api/eval/` (`metrics.py`, `run_eval.py`, `label_times.py`), `GE
 - checks: `cd web && npm run lint && npm run build`
 - test set: `python3 scripts/check_testset.py`; placeholder audio: `python3 scripts/make_placeholder_audio.py`
 - api: `cd api && source .venv/bin/activate && uvicorn app.main:app --reload` (needs `api/.env`); `python -m app.cli transcribe <audio> --dry-run` shows the plan without calling Gnani
-- tests: `cd api && .venv/bin/pytest && .venv/bin/ruff check .` (317 pass; no network, no credits)
+- tests: `cd api && .venv/bin/pytest && .venv/bin/ruff check .` (364 pass; no network, no credits)
+- eval: `api/.venv/bin/python eval/run_eval.py run` (cached transcripts only), `... ingest` (asks before spending credits), `eval/label_times.py`
 
 ## Environment (no secrets)
 - Gnani key: provided and verified (read-only list-jobs call returned 200)  LLM keys: Groq and Gemini provided and verified (model lists fetched)

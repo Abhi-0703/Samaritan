@@ -12,7 +12,7 @@ from app.errors import register_error_handlers
 from app.guards import RateLimiter
 from app.logging_config import configure_logging
 from app.migrate import upgrade_to_head
-from app.routers import agents, calls, rules, stats, violations
+from app.routers import agents, calls, evaluation, rules, stats, violations
 from app.runtime import Runtime, build_runtime
 from app.seed import seed_rules
 
@@ -51,7 +51,7 @@ def create_app(runtime_factory: Callable[[Settings], Runtime] | None = None) -> 
     def health() -> dict[str, str]:
         return {"status": "ok"}
 
-    for module in (calls, violations, agents, rules, stats):
+    for module in (calls, violations, agents, rules, stats, evaluation):
         app.include_router(module.router)
     return app
 
