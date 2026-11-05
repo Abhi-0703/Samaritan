@@ -69,3 +69,13 @@ Every [DECIDE] choice and every conflict between plan.md and reality is recorded
 ## D-016 — Credit budget is not a constraint
 - **Context:** plan.md Section 9.3 asks to confirm the 5,000 credits cover the run.
 - **Decision:** the dashboard shows STT at ₹20 per hour and 1 credit = ₹1, so the whole plan costs about 25 credits. The rule "ask before any bulk run" (Section 0, rule 7) still applies, but the spike can try several configurations freely. `GNANI_MAX_CONCURRENT` stays 1 because Gnani allows one active request at a time. See `docs/gnani-findings.md`.
+
+## D-017 — Gemini model is gemini-3.5-flash
+- **Context:** I first recommended `gemini-2.5-flash` because it was in the key's model list. Calling it returned 404 (retired for new accounts). See `docs/llm-findings.md`.
+- **Decision:** `GEMINI_MODEL=gemini-3.5-flash`, tested through the real provider code. The corrected recommendation was passed to the user.
+
+## D-018 — LLM layer choices
+- Groq runs with `reasoning_effort: low` (completion tokens fell from 1,257 to 429); if a model rejects that option or `response_format` the provider drops it once and carries on.
+- The env limits (`LLM_RPM_LIMIT`, `LLM_TPM_LIMIT`) apply to the primary provider; the fallback gets Gemini-sized defaults (10 requests and 200,000 tokens a minute).
+- The merge step collapses the same rule flagged on neighbouring segments into one violation (highest confidence, preferring `both`). plan.md does not say this; it avoids counting one threat twice as a false positive.
+- Layer 1 lexicons were seeded from plan Appendix B and the dev-split scripts only. The author of the lexicons had also written the held-out test scripts and had seen them, so some unconscious leakage is possible; the held-out numbers must be read with that in mind.
