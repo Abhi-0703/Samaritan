@@ -65,3 +65,7 @@ Every [DECIDE] choice and every conflict between plan.md and reality is recorded
 
 ## D-015 — Toolchain installed
 - On the user's approval, Homebrew installed `python@3.11` (3.11.18, at `/opt/homebrew/bin/python3.11`) and `ffmpeg` (9.0.2, with ffprobe). The API venv must be created with `python3.11`. This resolves D-005.
+
+## D-016 — Credit budget is not a constraint
+- **Context:** plan.md Section 9.3 asks to confirm the 5,000 credits cover the run.
+- **Decision:** the dashboard shows STT at ₹20 per hour and 1 credit = ₹1, so the whole plan costs about 25 credits. The rule "ask before any bulk run" (Section 0, rule 7) still applies, but the spike can try several configurations freely. `GNANI_MAX_CONCURRENT` stays 1 because Gnani allows one active request at a time. See `docs/gnani-findings.md`.
