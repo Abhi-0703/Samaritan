@@ -25,7 +25,7 @@ export function EmptyState({
 }
 
 export function ErrorState({
-  title = "Could not load this data",
+  title = "This did not load",
   message,
   onRetry,
   className,
@@ -39,7 +39,7 @@ export function ErrorState({
     <div role="alert" className={cn("flex flex-col items-center justify-center gap-2 px-6 py-12 text-center", className)}>
       <AlertCircle aria-hidden className="size-4 text-critical" />
       <p className="font-medium">{title}</p>
-      {message && <p className="max-w-md text-muted-foreground">{message}</p>}
+      <p className="max-w-md text-muted-foreground">{message ?? "Check your connection, then try again."}</p>
       {onRetry && (
         <Button variant="outline" size="sm" onClick={onRetry}>
           Try again

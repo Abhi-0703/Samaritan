@@ -68,9 +68,9 @@ export function ViolationsPerDayChart({ data }: { data: OverviewStats["violation
                 ) : null
               }
             />
-            <Bar dataKey="critical" stackId="s" className="fill-critical" isAnimationActive={false} />
-            <Bar dataKey="high" stackId="s" className="fill-high" isAnimationActive={false} />
-            <Bar dataKey="medium" stackId="s" className="fill-medium" isAnimationActive={false} />
+            <Bar dataKey="critical" stackId="s" className="fill-critical stroke-background" strokeWidth={1} isAnimationActive={false} />
+            <Bar dataKey="high" stackId="s" className="fill-high stroke-background" strokeWidth={1} isAnimationActive={false} />
+            <Bar dataKey="medium" stackId="s" className="fill-medium stroke-background" strokeWidth={1} isAnimationActive={false} />
           </BarChart>
         </ResponsiveContainer>
       </div>

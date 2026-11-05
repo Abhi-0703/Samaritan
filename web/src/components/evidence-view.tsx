@@ -79,9 +79,8 @@ export function EvidenceView({ id }: { id: string }) {
       />
       <PageContent className="max-w-[860px] space-y-8">
         <header className="border-b pb-4">
-          <p className="text-xs text-muted-foreground">Samaritan call audit</p>
-          <h2 className="mt-1 text-base font-semibold">Sahyog Finance, Collections QA</h2>
-          <p className="text-muted-foreground">Evidence summary for call {d.id}</p>
+          <h2 className="text-base font-semibold">Evidence summary, call {d.id}</h2>
+          <p className="text-muted-foreground">Sahyog Finance, Collections QA</p>
         </header>
 
         <section aria-label="Call details">

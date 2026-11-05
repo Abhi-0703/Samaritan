@@ -38,9 +38,9 @@ const ruleColumns = ruleCols.columns([
   ruleCols.display({ id: "p", header: "Precision", cell: ({ row }) => <span className="tnum">{formatPct(row.original.counts.precision)}</span> }),
   ruleCols.display({ id: "r", header: "Recall", cell: ({ row }) => <span className="tnum">{formatPct(row.original.counts.recall)}</span> }),
   ruleCols.display({ id: "f", header: "F1", cell: ({ row }) => <span className="tnum">{formatPct(row.original.counts.f1)}</span> }),
-  ruleCols.display({ id: "tp", header: "TP", cell: ({ row }) => <span className="tnum">{row.original.counts.tp}</span> }),
-  ruleCols.display({ id: "fp", header: "FP", cell: ({ row }) => <span className="tnum">{row.original.counts.fp}</span> }),
-  ruleCols.display({ id: "fn", header: "FN", cell: ({ row }) => <span className="tnum">{row.original.counts.fn}</span> }),
+  ruleCols.display({ id: "tp", header: "Correct", cell: ({ row }) => <span className="tnum">{row.original.counts.tp}</span> }),
+  ruleCols.display({ id: "fp", header: "False alarms", cell: ({ row }) => <span className="tnum">{row.original.counts.fp}</span> }),
+  ruleCols.display({ id: "fn", header: "Missed", cell: ({ row }) => <span className="tnum">{row.original.counts.fn}</span> }),
 ]);
 
 type Failure = EvalRun["failures"][number];
@@ -141,7 +141,7 @@ export function AccuracyView() {
           </Section>
         </div>
 
-        <Section title="By rule" description="Rules + LLM on all 30 calls. TP true positive, FP false positive, FN missed.">
+        <Section title="By rule" description="Rules + LLM on all 30 calls. Correct: a real violation was found. False alarm: flagged, but not a violation. Missed: a real violation was not flagged.">
           <div className="overflow-hidden rounded-lg border">
             <DataTable label="Accuracy by rule" minWidth={640} data={perRule} columns={ruleColumns} getRowId={(r) => r.code} rightAligned={[]} />
           </div>
@@ -160,7 +160,7 @@ export function AccuracyView() {
           </div>
         </Section>
 
-        <section className="max-w-3xl space-y-2 text-muted-foreground" aria-label="Methodology">
+        <section className="max-w-[68ch] space-y-2 text-muted-foreground" aria-label="Methodology">
           <h2 className="font-semibold text-foreground">How these numbers are measured</h2>
           <p>
             Thirty acted calls, 22 in Hinglish and 8 in Marathi, were recorded from scripts and labelled by hand. Detection was tuned on the 10 development calls only; the 20

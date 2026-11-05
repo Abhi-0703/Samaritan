@@ -57,7 +57,9 @@ export function TranscriptView({
 
   const rows = useRef<(HTMLButtonElement | null)[]>([]);
   useEffect(() => {
-    if (activeIndex >= 0) rows.current[activeIndex]?.scrollIntoView({ block: "nearest", behavior: "smooth" });
+    if (activeIndex < 0) return;
+    const calm = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    rows.current[activeIndex]?.scrollIntoView({ block: "nearest", behavior: calm ? "auto" : "smooth" });
   }, [activeIndex]);
 
   return (

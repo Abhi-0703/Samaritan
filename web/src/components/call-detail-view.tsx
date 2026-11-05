@@ -15,7 +15,7 @@ import { Button, buttonVariants } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { ViolationsPanel } from "@/components/violations-panel";
 import { api } from "@/lib/api";
-import { formatDuration, formatLongDateTime, isTerminal, statusLabel } from "@/lib/format";
+import { formatDateTime, formatDuration, formatLongDateTime, isTerminal, statusLabel } from "@/lib/format";
 import { useAsync } from "@/lib/hooks/use-async";
 import type { CallDetail, CallStatus, ReviewerStatus, Violation } from "@/lib/types";
 import { cn } from "@/lib/utils";
@@ -179,7 +179,7 @@ export function CallDetailView({ id }: { id: string }) {
               <DropdownMenuContent align="end">
                 <DropdownMenuItem disabled={!done} onClick={swapRoles}>
                   <Repeat2 aria-hidden />
-                  Swap Agent and Borrower roles
+                  Swap roles
                 </DropdownMenuItem>
                 <DropdownMenuItem disabled={processing} onClick={() => retry("Analysis re-run started.")}>
                   <RefreshCw aria-hidden />
@@ -198,7 +198,7 @@ export function CallDetailView({ id }: { id: string }) {
             </Link>
           </Meta>
           <Meta label="Called at (IST)">
-            <span className="tnum">{formatLongDateTime(d.called_at).replace(" IST", "")}</span>
+            <span className="tnum">{formatDateTime(d.called_at)}</span>
           </Meta>
           <Meta label="Duration">
             <span className="tnum">{formatDuration(d.duration_s)}</span>

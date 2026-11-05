@@ -63,7 +63,7 @@ export function RulesView() {
     <>
       <PageHeader title="Rules" description="The nine recovery-conduct rules every call is checked against." />
       <PageContent>
-        <p className="max-w-3xl text-muted-foreground">
+        <p className="max-w-[68ch] text-muted-foreground">
           Disabling a rule skips it in future analysis, hides its existing flags and recomputes every call and agent score without it. Existing flags are not deleted, and
           turning the rule back on restores them.
         </p>

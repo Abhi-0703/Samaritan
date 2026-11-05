@@ -69,9 +69,6 @@ export function ViolationsPanel({
                   <RuleCode code={v.rule_code} />
                   <span className="font-medium">{v.rule_name}</span>
                   <SeverityBadge severity={v.severity} />
-                  <span className="ml-auto">
-                    <ReviewerBadge status={v.reviewer_status} />
-                  </span>
                 </div>
                 <div className={cn("space-y-2", dismissed && "opacity-60")}>
                   <Evidence v={v} onSeek={onSeek} />
@@ -101,6 +98,11 @@ export function ViolationsPanel({
                     <X aria-hidden data-icon="inline-start" />
                     {dismissed ? "Restore" : "Dismiss"}
                   </Button>
+                  {v.reviewer_status !== "open" && (
+                    <span className="ml-auto self-center">
+                      <ReviewerBadge status={v.reviewer_status} />
+                    </span>
+                  )}
                 </div>
               </li>
             );

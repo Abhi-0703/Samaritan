@@ -1,5 +1,5 @@
 # progress.md
-Last updated: 2026-11-01 04:10 IST | Phase: 1 | Step: built and checked, awaiting user design feedback
+Last updated: 2026-11-05 | Phase: 1 | Step: design check done, awaiting user approval
 
 ## Status
 Phase 0 is done and the user told the agent to proceed. Phase 1 (full web UI on mock data) is built: all seven routes, light and dark themes, upload drawer, call detail with waveform and transcript sync, evidence page. `npm run lint` and `npm run build` pass. Waiting for the user to look at it and give design feedback before Phase 2. The Accuracy figures are sample data, labelled as such in the UI.
@@ -11,6 +11,7 @@ Ask the user for Phase 1 feedback (screenshots: Overview, Calls, Call detail, Ac
 - Phase 0: repo skeleton, 30 scripts, 30 answer keys, COVERAGE.md, RECORDING_GUIDE.md. Verified by `python3 scripts/check_testset.py` (scripts and keys agree; all Section 9.1 totals met).
 - Phase 1 build: `npm run lint` clean, `npm run build` passes, TypeScript strict, no `lib/mock` imports outside `src/lib` (ESLint rule enforces it), no forbidden style patterns found by grep.
 - Phase 1 checked by hand in the browser: Overview, Calls (filter, search, sort, polling), upload drawer (file validation, wrong then right passcode, new row goes Queued to Done), call detail (waveform markers, click-to-seek, `?t=` deep link, Confirm/Dismiss recomputes score), failed call Retry, evidence page, Agents list and detail, Rules toggle (V9 off removes it from Overview), Accuracy slices. Light and dark seen at 1280 or 1440 px; mobile width seen on call detail.
+- Design check with Anthropic's `frontend-design` skill (installed at `.claude/skills/frontend-design`, git-ignored; `skills-lock.json` left untracked). plan.md Section 3 overrides its call for bold choices. Fixes applied: one name per action (Swap roles), no "Open" badge on undecided flags, plain accuracy column names, 68-character prose lines, chart segment separators, reduced-motion support, clearer error text. Screenshots of Overview, Calls, Call detail and Accuracy in both themes were sent to the user.
 - Contrast measured for the main colour pairs in both themes; all at 4.5:1 or better after the dark-mode fixes (D-009).
 
 ## In progress / unverified
