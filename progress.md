@@ -2,7 +2,7 @@
 Last updated: 2026-11-05 | Phase: 1 complete, Phase 2 not started | Step: waiting for Phase 2 inputs
 
 ## Status
-Phases 0 and 1 are approved by the user (scripts confirmed actable; Phase 1 design "looks right"). Python 3.11 and ffmpeg are installed. RBI references are drafted but unverified. Phase 2 (FastAPI backend, Gnani, LLM, detection, evaluation) has not started. The user has put the Gnani, Groq and Gemini keys in `api/.env` (Groq and Gemini verified working; Gnani untested). Pricing is known: STT is Rs 20 per hour, so the whole plan costs about 25 credits. Deadline: 2026-11-10 23:59 IST.
+Phases 0 and 1 are approved by the user (scripts confirmed actable; Phase 1 design "looks right"). Python 3.11 and ffmpeg are installed. RBI references are drafted but unverified. Phase 2 (FastAPI backend, Gnani, LLM, detection, evaluation) has not started. The user has put the Gnani, Groq and Gemini keys in `api/.env` (all three verified working). Pricing is known: STT is Rs 20 per hour, so the whole plan costs about 25 credits. Deadline: 2026-11-10 23:59 IST.
 
 ## Next action
 When the user supplies the Phase 2 inputs (at least the Gnani key in `api/.env`, Groq and Gemini keys and model names), start Phase 2.1: create `api/` with `python3.11 -m venv`, FastAPI skeleton, config, error envelope, SQLAlchemy models, Alembic migration, 9 seeded rules, local storage. Work that needs no keys (2.1 to 2.4, fake Gnani server, audio prep) may start before the keys arrive.
@@ -22,7 +22,7 @@ When the user supplies the Phase 2 inputs (at least the Gnani key in `api/.env`,
 - All numbers on the Accuracy page are sample data from the mock client, not measurements.
 
 ## Waiting on the user
-- Permission for the first real Gnani call (a read-only key check was offered) and, later, the full 30-call run. Keys are in `api/.env`; credits are no longer a question (D-016). Gemini model: recommended `gemini-2.5-flash`, not yet written to `.env`.
+- Permission before the first real transcription (the spike) and, later, the full 30-call run. Keys are in `api/.env`; credits are no longer a question (D-016). Gemini model: recommended `gemini-2.5-flash`, not yet written to `.env`.
 - GitHub repository URL (user said they will provide it); nothing is pushed yet.
 - RBI source PDFs saved under `docs/rbi-sources/`, or pasted paragraphs, to verify clause numbers (D-014).
 - Recordings in `data/audio/`: 0 of 30 (user and friend both speak Marathi; separate-channel recording is possible for 1 or 2 calls).
@@ -49,6 +49,6 @@ When the user supplies the Phase 2 inputs (at least the Gnani key in `api/.env`,
 - api: not built yet   tests: none yet
 
 ## Environment (no secrets)
-- Gnani key: provided (untested)  LLM keys: Groq and Gemini provided and verified (model lists fetched)
+- Gnani key: provided and verified (read-only list-jobs call returned 200)  LLM keys: Groq and Gemini provided and verified (model lists fetched)
 - Database: none (mock data in memory)   Deployed: no
 - Tools: node v24, npm 11, git 2.54, python3.11 3.11.18, ffmpeg 9.0.2

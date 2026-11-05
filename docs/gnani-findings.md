@@ -1,6 +1,6 @@
 # Gnani findings
 
-Working notes for Phase 2. Facts are tagged by source. Nothing here has been confirmed by a real API call yet.
+Working notes for Phase 2. Facts are tagged by source.
 
 ## Pricing and credits (from the user's Gnani dashboard, 2026-11-05)
 - 1 credit = ₹1. Balance at the time: 5,000 of 5,000 credits (about 250 hours of STT at the rate below).
@@ -18,7 +18,10 @@ Working notes for Phase 2. Facts are tagged by source. Nothing here has been con
 - Batch pages exist under both `/api/STTBatch/` and `/api/STT/batch/`; the plan uses the latter.
 - The docs index page called "Dashboard" is about a different Gnani product (call and chat metrics), not credits.
 
-## Open (needs a real call, after the user's go-ahead)
-- Does the key work, and does Batch accept `prisma-v3.0` on this account?
+## Verified by a real call (2026-11-05, with the user's permission)
+- `GET /stt/v3/batch/jobs?limit=5` with the user's key returned HTTP 200 and `{data: [], pagination: {has_more: false, next_cursor: null}}`. So the key is valid, has the STT scope, and the account has no batch jobs yet. Response shape matches the docs. No audio was sent.
+
+## Open (needs a real transcription, after the user's go-ahead)
+- Does Batch accept `prisma-v3.0` on this account?
 - Chosen transcription configuration (plan Section 7.4, spike A to E).
 - Credit cost per call as shown on the Usage page.
