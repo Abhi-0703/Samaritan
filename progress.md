@@ -23,7 +23,6 @@ When the user supplies the Phase 2 inputs (at least the Gnani key in `api/.env`,
 
 ## Waiting on the user
 - Permission before the first real transcription (the spike) and, later, the full 30-call run. Keys are in `api/.env`; credits are no longer a question (D-016). Gemini model: recommended `gemini-2.5-flash`, not yet written to `.env`.
-- GitHub repository URL (user said they will provide it); nothing is pushed yet.
 - RBI source PDFs saved under `docs/rbi-sources/`, or pasted paragraphs, to verify clause numbers (D-014).
 - Recordings in `data/audio/`: 0 of 30 (user and friend both speak Marathi; separate-channel recording is possible for 1 or 2 calls).
 
@@ -35,6 +34,9 @@ When the user supplies the Phase 2 inputs (at least the Gnani key in `api/.env`,
 
 ## Deviations from plan.md
 - next-themes not used (D-008). Dark-mode accent colours slightly extended (D-009). Both recorded in docs/decisions.md.
+
+## Repository
+- Remote `origin` is https://github.com/Abhi-0703/Samaritan (public). `main` was pushed on 2026-11-05 with the user's go-ahead, over HTTPS using the `gh` credential helper (no SSH key is set up on this Mac). Only `.env.example` files are on GitHub. Later pushes need the user's go-ahead each time.
 
 ## Known issues
 - Mock state resets on a full page reload; navigating inside the app keeps it.
