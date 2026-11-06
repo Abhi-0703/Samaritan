@@ -47,6 +47,8 @@ export const mockClient: ApiClient = {
   isMock: true,
   demoMode,
 
+  health: (): Promise<void> => latency(() => undefined, 20, 60),
+
   getOverview: (): Promise<OverviewStats> => latency(() => getDb().overview()),
 
   listCalls: (params: ListCallsParams = {}): Promise<Paginated<Call>> => latency(() => getDb().list(params), 150, 380),

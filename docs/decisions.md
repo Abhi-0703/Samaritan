@@ -101,3 +101,13 @@ Every [DECIDE] choice and every conflict between plan.md and reality is recorded
 - **Role-mapping truth:** answer keys have no speaker labels. `label_times.py` can add `agent_speaker_id` to a key (optional field, like D-002). Until labelled, the truth is "the first speaker is the agent", because every script opens with the agent; the report states which basis was used. This is partly the same signal the heuristic uses, so treat unlabelled role accuracy as optimistic.
 - **Ingest:** `python eval/run_eval.py ingest` registers `data/audio/call_NN.*` as test calls (agent and loan reference from the script header, dated yesterday at the key's time) and asks before sending anything to Gnani, showing minutes and the credit estimate.
 
+## D-024 — Web talks to the API through `httpClient`; demo mode is a build flag
+- **Context:** the ApiClient interface needs `demoMode` synchronously, and plan.md keeps `/health` as `{status:"ok"}`.
+- **Decision:** `NEXT_PUBLIC_DATA_SOURCE=api` selects `lib/api/httpClient.ts` (`mock` stays the default for offline work). `NEXT_PUBLIC_DEMO_MODE=true` (set in the Vercel dashboard together with the API's `DEMO_MODE=true`) shows the passcode fields; the passcode itself is never in the bundle. If the two flags disagree the API still answers 403 with a clear message. Uploads use XMLHttpRequest because `fetch` cannot report upload progress; progress per file is derived from bytes sent. `ApiStatus` shows "The server is waking up" when `/health` is slow and reloads the page once the API answers.
+
+## D-025 — Dev server on fakes
+- `python -m app.devserver` (or the `api-dev` launch entry) runs the real API with the fake Gnani and a canned LLM, in `api/.data/dev/`. It lets the web app be developed and demonstrated without keys or credits. Every upload "transcribes" the same short conversation containing one threat. It is not used in production.
+
+## D-026 — Dockerfile
+- `api/Dockerfile` (python:3.11-slim plus ffmpeg) installs the package editable so `alembic/`, `alembic.ini` and the YAML config stay next to the code. Docker is not installed on this Mac, so the image itself has not been built; the same steps were run in a clean virtualenv and the API booted and migrated. The first real build happens on the host.
+

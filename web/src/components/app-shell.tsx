@@ -17,6 +17,7 @@ import {
   Sun,
   Users,
 } from "lucide-react";
+import { ApiStatus } from "@/components/api-status";
 import { AboutDialog } from "@/components/about-dialog";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
@@ -178,6 +179,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           </Sheet>
           <span className="font-semibold">Samaritan</span>
         </div>
+        <ApiStatus />
         <div className="flex-1">{children}</div>
       </div>
     </div>
