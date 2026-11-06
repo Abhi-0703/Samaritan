@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import os
+
 import pytest
 
 from app import db as db_module
@@ -8,10 +10,35 @@ from app.migrate import upgrade_to_head
 from app.storage import get_storage
 
 
+@pytest.fixture(scope="session")
+def pg_url(tmp_path_factory):
+    """`TEST_PG=1 pytest` runs the whole suite on a throwaway local Postgres (pgserver) instead of SQLite."""
+    if not os.environ.get("TEST_PG"):
+        yield None
+        return
+    import pgserver
+
+    server = pgserver.get_server(tmp_path_factory.mktemp("pg"), cleanup_mode="stop")
+    yield server.get_uri()
+    server.cleanup()  # stop it now, while logging still works
+
+
 @pytest.fixture(autouse=True)
-def isolated_env(tmp_path, monkeypatch):
+def isolated_env(tmp_path, monkeypatch, pg_url):
     """Every test gets its own database and audio folder and never sees the real keys in api/.env."""
-    monkeypatch.setenv("DATABASE_URL", f"sqlite:///{tmp_path / 'test.db'}")
+    if pg_url:
+        from sqlalchemy import create_engine, text
+
+        engine = create_engine(
+            pg_url.replace("postgresql://", "postgresql+psycopg://", 1), isolation_level="AUTOCOMMIT"
+        )
+        with engine.connect() as conn:  # a clean schema per test
+            conn.execute(text("DROP SCHEMA public CASCADE"))
+            conn.execute(text("CREATE SCHEMA public"))
+        engine.dispose()
+        monkeypatch.setenv("DATABASE_URL", pg_url)
+    else:
+        monkeypatch.setenv("DATABASE_URL", f"sqlite:///{tmp_path / 'test.db'}")
     monkeypatch.setenv("LOCAL_AUDIO_DIR", str(tmp_path / "audio"))
     monkeypatch.setenv("GNANI_API_KEY", "test-gnani-key-0000")
     monkeypatch.setenv("GROQ_API_KEY", "test-groq-key-0000")
@@ -24,6 +51,8 @@ def isolated_env(tmp_path, monkeypatch):
     monkeypatch.setenv("WORKER_ENABLED", "false")  # tests drain the queue themselves
     get_settings.cache_clear()
     get_storage.cache_clear()
+    if pg_url:  # the app applies Postgres migrations explicitly, not at start-up
+        upgrade_to_head()
     yield
     get_settings.cache_clear()
     get_storage.cache_clear()

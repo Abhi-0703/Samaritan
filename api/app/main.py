@@ -5,9 +5,10 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from sqlalchemy import inspect
 
 from app.config import Settings, get_settings
-from app.db import init_db, session_scope
+from app.db import get_engine, init_db, session_scope
 from app.errors import register_error_handlers
 from app.guards import RateLimiter
 from app.logging_config import configure_logging
@@ -26,6 +27,8 @@ def create_app(runtime_factory: Callable[[Settings], Runtime] | None = None) -> 
         if settings.database_url.startswith("sqlite"):
             upgrade_to_head()  # Postgres migrations are applied explicitly (Phase 3)
         init_db()
+        if not settings.database_url.startswith("sqlite") and "rules" not in inspect(get_engine()).get_table_names():
+            raise RuntimeError("The database has no tables yet. Run `python -m app.migrate` once, then start the API.")
         with session_scope() as session:
             seed_rules(session)
         runtime = (runtime_factory or build_runtime)(settings)

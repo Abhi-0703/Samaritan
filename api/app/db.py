@@ -11,10 +11,24 @@ from sqlalchemy.orm import Session, sessionmaker
 from app.config import get_settings
 
 
+def normalise_url(url: str) -> str:
+    """Supabase shows `postgresql://` (older tools: `postgres://`). Use the psycopg 3 driver we install."""
+    for prefix in ("postgres://", "postgresql://"):
+        if url.startswith(prefix):
+            return "postgresql+psycopg://" + url[len(prefix) :]
+    return url
+
+
 def make_engine(url: str) -> Engine:
+    url = normalise_url(url)
     kwargs: dict = {"pool_pre_ping": True}
     if url.startswith("sqlite"):
         kwargs["connect_args"] = {"check_same_thread": False, "timeout": 30}  # the worker and requests share the file
+    else:
+        # Supabase's pooler runs in transaction mode, which cannot keep prepared statements between queries.
+        # A small pool and recycling keep the free tier's connection limit and idle timeouts happy.
+        kwargs["connect_args"] = {"prepare_threshold": None}
+        kwargs.update(pool_size=5, max_overflow=5, pool_recycle=300)
     engine = create_engine(url, **kwargs)
     if url.startswith("sqlite"):
 

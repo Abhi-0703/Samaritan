@@ -28,6 +28,7 @@ from app.runtime import Runtime
 from app.services import audio
 from app.services.pipeline import analyse_call
 from app.services.queries import call_detail, call_schema, ist_day, rules_by_code
+from app.storage.supabase import StorageError
 
 router = APIRouter()
 
@@ -225,7 +226,10 @@ def get_audio_url(
     call_id: str, request: Request, session: Session = Depends(get_session), runtime: Runtime = Depends(get_runtime)
 ) -> schemas.AudioUrl:
     call = load_call(session, call_id)
-    url, expires = runtime.storage.url(str(call.id), call.audio_path)
+    try:
+        url, expires = runtime.storage.url(str(call.id), call.audio_path)
+    except StorageError as e:
+        raise ApiError(502, "storage_unavailable", "The audio could not be fetched from storage. Try again.") from e
     if url.startswith("/"):
         url = str(request.base_url).rstrip("/") + url
     expires = expires or datetime.now(UTC) + timedelta(hours=1)

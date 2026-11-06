@@ -4,6 +4,7 @@ from sqlalchemy import engine_from_config, pool
 
 from alembic import context
 from app.config import get_settings
+from app.db import normalise_url
 from app.models import Base
 
 # this is the Alembic Config object, which provides
@@ -20,7 +21,7 @@ if config.config_file_name is not None and config.attributes.get("configure_logg
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
 target_metadata = Base.metadata
-config.set_main_option("sqlalchemy.url", get_settings().database_url.replace("%", "%%"))
+config.set_main_option("sqlalchemy.url", normalise_url(get_settings().database_url).replace("%", "%%"))
 
 # other values from the config, defined by the needs of env.py,
 # can be acquired:

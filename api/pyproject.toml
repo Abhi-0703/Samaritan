@@ -19,10 +19,11 @@ dependencies = [
   "rapidfuzz>=3.9",
   "python-multipart>=0.0.9",
   "google-genai>=1.0",
+  "psycopg[binary]>=3.2",
 ]
 
 [project.optional-dependencies]
-dev = ["pytest>=8", "ruff>=0.6"]
+dev = ["pytest>=8", "ruff>=0.6", "pgserver>=0.1"]  # pgserver: a throwaway local Postgres for TEST_PG=1
 
 [tool.setuptools.packages.find]
 include = ["app*"]

@@ -111,3 +111,13 @@ Every [DECIDE] choice and every conflict between plan.md and reality is recorded
 ## D-026 — Dockerfile
 - `api/Dockerfile` (python:3.11-slim plus ffmpeg) installs the package editable so `alembic/`, `alembic.ini` and the YAML config stay next to the code. Docker is not installed on this Mac, so the image itself has not been built; the same steps were run in a clean virtualenv and the API booted and migrated. The first real build happens on the host.
 
+## D-027 — Supabase code is built and tested without a Supabase project
+- **Context:** Phase 3 was started early because it does not depend on recordings.
+- **Decision:** Storage uses the Storage REST API through httpx (no SDK), with endpoints taken from supabase-js's source and tested against a fake. The database is plain Postgres through `psycopg` 3; `postgresql://` URLs are rewritten to the driver, prepared statements are off (the pooler runs in transaction mode) and the pool is small (5 plus 5). `pgserver` (a throwaway local Postgres, dev dependency) runs the whole suite on a real Postgres with `TEST_PG=1 pytest`; both SQLite and Postgres pass. The lock-down SQL (`supabase/rls_and_storage.sql`) was run on that Postgres against stand-ins for the `anon` and `authenticated` roles and the `storage` schema.
+- **Not verified against real Supabase:** the signed-URL response shape, the bucket insert into `storage.buckets` and role names on Supabase itself. Each is the documented behaviour but was only exercised against stand-ins. The first run on the real project is the proof; the seed scripts are dry-run by default for that reason.
+- Postgres migrations are never applied at start-up: `python -m app.migrate` does it, and the API refuses to start on an empty Postgres with that instruction.
+
+## D-028 — Seeding rules
+- `seed.py` adds the nine rules and the six roster agents (three names come from the scripts, three from the Phase 1 mock) and, with `--from-local`, copies only test-set calls that were really processed, with their transcripts, violations and audio, redated into the last 14 days at the same time of day. It never invents a call. Evaluation runs copied are the latest of each configuration.
+- `reset_demo.py` removes uploads and their audio, clears reviewer decisions, switches every rule back on and removes agents with no calls who are not on the roster. A test-set call whose roles a visitor swapped is analysed again from its cached transcript (no Gnani; the LLM answer is cached when the prompt matches, otherwise one LLM call).
+
