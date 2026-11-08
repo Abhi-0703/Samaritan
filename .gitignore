@@ -39,3 +39,6 @@ coverage/
 
 # Python packaging
 *.egg-info/
+
+# Untrimmed recordings
+data/audio_originals/

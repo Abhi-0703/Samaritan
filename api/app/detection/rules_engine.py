@@ -36,6 +36,8 @@ def _lender_regexes() -> tuple[re.Pattern[str], ...]:
         needle = re.escape(for_matching(alias))
         tail = "" if has_devanagari(alias) else f"(?!{WORD_CLASS})"
         out.append(re.compile(f"(?<!{WORD_CLASS}){needle}{tail}", re.UNICODE))
+    for pattern in load_yaml("workspace.yaml").get("lender_generic_patterns", []):
+        out.append(re.compile(pattern, re.UNICODE))
     return tuple(out)
 
 

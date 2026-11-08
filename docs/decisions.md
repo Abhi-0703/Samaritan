@@ -125,3 +125,9 @@ Every [DECIDE] choice and every conflict between plan.md and reality is recorded
 - **Context:** the first real run was started from the repository root, so `DATABASE_URL=sqlite:///./local.db` created the database in the repository root instead of `api/`, while audio went to `api/.data/audio`. The real run's data was found there and moved to `api/local.db`.
 - **Decision:** `normalise_url` resolves a relative SQLite path against `api/`, wherever the command is started. Tested.
 
+## D-030 — V8 accepts a misheard lender name; first real evaluation
+- **Context:** Gnani hears "Sahyog Finance" as "Safe", "Syro", "Syed Bank" or "Surya" Finance. Layer 1's V8 check needed the exact alias, so `rules_only` flagged V8 on every call (4 false alarms in 5). The cause was visible on dev calls (call_01, call_02, call_16); the test calls call_08 and call_10 showed the same, and I did see their results before fixing, so the held-out numbers of those two are not fully blind.
+- **Decision:** `lender_generic_patterns` in `workspace.yaml`: "<word> Finance/Capital se" (either script) counts as naming a lender. "bank se" is deliberately left out ("aapka bank se payment" is not an introduction). Known leniency: any word before "finance se" passes. `call_16`, where the agent names no one, still fails V8 correctly.
+- **First real numbers (5 calls, trimmed recordings, times unlabelled, so matched on rule only):** `rules_plus_llm` precision 100% on dev, 75% on test; recall 100%; 0 of 1 clean calls flagged. `rules_only` precision 75%, recall 86% (missed V6, which only the LLM found). Remaining failures: V9 flagged on the V3 threat in call_08 (LLM, test split, not tuned); weak "dekh lenge" V3 hits in rules_only on call_01 and call_16 (the LLM drops them). Five calls is far too few to read as accuracy.
+- **Recordings:** the read-aloud headers were trimmed off (originals in `data/audio_originals/`, git-ignored). Roles then mapped correctly on all five.
+

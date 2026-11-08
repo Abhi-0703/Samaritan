@@ -15,6 +15,11 @@ lender_aliases:
   - सहयोग फाइनान्स
   - सहयोग फ़ाइनेंस
   - सहयोग
+# Speech-to-text often mishears the lender ("Safe Finance", "Syro Finance", "Syed Bank Finance"; docs/gnani-findings.md).
+# An agent who says "<name> Finance/Capital se" has named a lender ("bank se" is left out: "aapka bank se payment" is not an introduction), whatever the transcript made of the spelling.
+# Matched on normalised text, so punctuation and case do not matter.
+lender_generic_patterns:
+  - "\\w+\\s+(finance|financial|capital|फाइनेंस|फ़ाइनेंस|फायनान्स|फाइनान्स|कैपिटल)\\s+(se|से|from|मधून|कडून|limited|ltd|लिमिटेड)(?!\\w)"
 default_agent_team: Collections
 # Run V8 over agent speech in this many seconds from the start of the call.
 introduction_window_s: 60

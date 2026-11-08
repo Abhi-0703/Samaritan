@@ -346,3 +346,25 @@ def test_dev_script_roles_are_mapped_correctly_when_labels_are_hidden():
         m = map_roles(ids)
         agent_first = segs[0].speaker == "agent"
         assert m.agent_speaker_id == (1 if agent_first else 2), name
+
+
+@pytest.mark.parametrize(
+    "heard",
+    ["Safe Finance से", "Syro Finance से", "Syed Bank Finance से", "service finance से", "Surya Finance से",
+     "Sai Capital से", "सेफ फाइनेंस से"],
+)  # fmt: skip
+def test_v8_accepts_a_lender_name_the_transcript_misspelled(heard):
+    """Real Gnani output for 'Sahyog Finance' (docs/gnani-findings.md). The agent did name a lender."""
+    text = f"नमस्ते, मैं रोहित पाटिल बोल रहा हूँ {heard}। क्या मेरी बात अनिल जी से हो रही है?"
+    assert not check_introduction([seg(0, text)], "hinglish").missing
+
+
+@pytest.mark.parametrize(
+    "text",
+    [
+        "हाँ, hello, दिनेश भोसले बोल रहे हो? loan के बारे में बात करने के लिए",  # real call_16 opening
+        "main Rohit bol raha hoon. Aapka bank se payment kab aayega?",  # a bank, but not the agent's employer
+    ],
+)
+def test_v8_still_fails_when_no_lender_is_named(text):
+    assert check_introduction([seg(0, text)], "hinglish").missing
