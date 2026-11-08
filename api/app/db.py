@@ -8,11 +8,17 @@ from contextlib import contextmanager
 from sqlalchemy import Engine, create_engine, event
 from sqlalchemy.orm import Session, sessionmaker
 
-from app.config import get_settings
+from app.config import API_DIR, get_settings
 
 
 def normalise_url(url: str) -> str:
-    """Supabase shows `postgresql://` (older tools: `postgres://`). Use the psycopg 3 driver we install."""
+    """Supabase shows `postgresql://` (older tools: `postgres://`). Use the psycopg 3 driver we install.
+
+    A relative SQLite path is read from the api/ folder, not from wherever the command was started."""
+    if url.startswith("sqlite:///") and not url.startswith("sqlite:////") and ":memory:" not in url:
+        relative = url[len("sqlite:///") :]
+        if relative:
+            return f"sqlite:///{(API_DIR / relative).resolve()}"
     for prefix in ("postgres://", "postgresql://"):
         if url.startswith(prefix):
             return "postgresql+psycopg://" + url[len(prefix) :]

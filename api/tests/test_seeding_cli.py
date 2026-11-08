@@ -88,7 +88,7 @@ def test_supabase_urls_are_normalised_to_the_psycopg_driver():
     assert db.normalise_url("postgresql://u:p@h:6543/postgres") == "postgresql+psycopg://u:p@h:6543/postgres"
     assert db.normalise_url("postgres://u:p@h/db") == "postgresql+psycopg://u:p@h/db"
     assert db.normalise_url("postgresql+psycopg://u:p@h/db") == "postgresql+psycopg://u:p@h/db"
-    assert db.normalise_url("sqlite:///x.db") == "sqlite:///x.db"
+    assert db.normalise_url("sqlite:////tmp/x.db") == "sqlite:////tmp/x.db"
 
 
 def test_the_postgres_engine_is_set_up_for_the_transaction_pooler(monkeypatch):
@@ -122,3 +122,14 @@ def test_start_up_on_an_unmigrated_postgres_says_what_to_do(pg_url, runtime):
     engine.dispose()
     with pytest.raises(RuntimeError, match="python -m app.migrate"), TestClient(create_app(lambda s: runtime)):
         pass
+
+
+def test_a_relative_sqlite_path_is_read_from_the_api_folder_not_the_working_directory(tmp_path, monkeypatch):
+    from app.config import API_DIR
+
+    monkeypatch.chdir(tmp_path)
+    assert db.normalise_url("sqlite:///./local.db") == f"sqlite:///{API_DIR / 'local.db'}"
+    assert db.normalise_url("sqlite:///.data/x.db") == f"sqlite:///{API_DIR / '.data' / 'x.db'}"
+    assert db.normalise_url("sqlite:////abs/path.db") == "sqlite:////abs/path.db"
+    assert db.normalise_url("sqlite://") == "sqlite://"
+    assert db.normalise_url("sqlite:///:memory:") == "sqlite:///:memory:"

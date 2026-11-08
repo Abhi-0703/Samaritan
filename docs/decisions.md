@@ -121,3 +121,7 @@ Every [DECIDE] choice and every conflict between plan.md and reality is recorded
 - `seed.py` adds the nine rules and the six roster agents (three names come from the scripts, three from the Phase 1 mock) and, with `--from-local`, copies only test-set calls that were really processed, with their transcripts, violations and audio, redated into the last 14 days at the same time of day. It never invents a call. Evaluation runs copied are the latest of each configuration.
 - `reset_demo.py` removes uploads and their audio, clears reviewer decisions, switches every rule back on and removes agents with no calls who are not on the roster. A test-set call whose roles a visitor swapped is analysed again from its cached transcript (no Gnani; the LLM answer is cached when the prompt matches, otherwise one LLM call).
 
+## D-029 — Relative SQLite paths are read from `api/`
+- **Context:** the first real run was started from the repository root, so `DATABASE_URL=sqlite:///./local.db` created the database in the repository root instead of `api/`, while audio went to `api/.data/audio`. The real run's data was found there and moved to `api/local.db`.
+- **Decision:** `normalise_url` resolves a relative SQLite path against `api/`, wherever the command is started. Tested.
+
