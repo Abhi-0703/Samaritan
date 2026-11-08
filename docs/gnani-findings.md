@@ -36,3 +36,8 @@ All five recordings begin with the speaker reading the script's header line and 
 ## Open
 - Whether Gnani rounds billing per file; check the Usage page after this run.
 - Chosen transcription configuration (plan Section 7.4, spike A to E): A works; B to E not compared.
+
+## First solo recording with a synthetic borrower (call_14, 2026-11-09)
+- 2.0 minutes, about 0.7 credits. Gnani separated the human agent and the Rishi voice correctly; roles mapped right; both expected violations (V7, V4) found by Layer 1 and the LLM together. The agent's lender name came out right this time ("सहयोग finance").
+- The synthetic borrower is transcribed with a few word errors, mostly late in the call ("मीन अपने मामा से", "कक्का बाटाड़ दूंगा"). They do not touch any rule. A slower voice (`--rate 150`) may help.
+
