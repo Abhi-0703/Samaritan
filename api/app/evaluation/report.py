@@ -27,7 +27,7 @@ def _slice_row(result: ConfigResult, name: str, members: list[str]) -> str:
     )
 
 
-def render(ev: Evaluation, when: datetime) -> str:
+def render(ev: Evaluation, when: datetime, provenance: dict[str, dict] | None = None) -> str:
     out = [f"# Evaluation report, {when:%Y-%m-%d %H:%M} IST", ""]
     out += [
         "Tuning used the `dev` calls only. The `test` rows are the held-out result.",
@@ -36,6 +36,15 @@ def render(ev: Evaluation, when: datetime) -> str:
         "(V1 and V8 match on rule only; a violation with no labelled time matches on rule only).",
         "",
     ]
+    evaluated = sorted({o.key.test_key for r in ev.results.values() for o in r.outcomes})
+    synthetic = [k for k in evaluated if (provenance or {}).get(k, {}).get("borrower") == "synthetic"]
+    if synthetic:
+        out += [
+            f"**Synthetic borrower voice ({len(synthetic)} of {len(evaluated)} calls):** {', '.join(synthetic)}. "
+            "The agent is a real person on a microphone and the borrower is a computer voice, so speaker separation "
+            "on these calls is easier than on a real two-person call. Read their numbers with that in mind.",
+            "",
+        ]
     for w in ev.warnings:
         out.append(f"> **Warning:** {w}")
     if ev.warnings:
@@ -88,8 +97,8 @@ def render(ev: Evaluation, when: datetime) -> str:
     return "\n".join(out)
 
 
-def write_report(ev: Evaluation, when: datetime, directory=REPORTS_DIR):
+def write_report(ev: Evaluation, when: datetime, directory=REPORTS_DIR, provenance: dict[str, dict] | None = None):
     directory.mkdir(parents=True, exist_ok=True)
     path = directory / f"{when:%Y%m%d-%H%M%S}.md"
-    path.write_text(render(ev, when), encoding="utf-8")
+    path.write_text(render(ev, when, provenance), encoding="utf-8")
     return path

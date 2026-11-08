@@ -100,3 +100,23 @@ Then record the rest. The minimum useful set is 20 calls. All 30 are needed for 
 ## 9. Script checks
 
 `python3 scripts/check_testset.py` verifies that scripts and answer keys agree (markers, quotes, times, languages, counts) and regenerates `data/COVERAGE.md`. Run it after any change to a script or key.
+
+## 10. Recording alone (you are the agent, a computer voice is the borrower)
+
+If there is nobody to play the borrower, `scripts/record_call.py` does it for you. It shows each AGENT line, records you, speaks each BORROWER line in a synthetic voice, and joins everything into one mono file in `data/audio/`. It works on a Mac for Hinglish calls only: this Mac has no Marathi voice, so Marathi calls (`call_05`, `call_15`, `call_19`, `call_23` and the other Marathi ones) need a real second person.
+
+```bash
+api/.venv/bin/python scripts/record_call.py --list-devices      # which microphones the Mac sees
+api/.venv/bin/python scripts/record_call.py call_14             # record one call
+api/.venv/bin/python scripts/record_call.py call_13 --noise brown --noise-level 0.06    # a noisy call
+```
+
+- It picks the built-in microphone. Bluetooth earbuds drop to phone quality while recording, so leave them out of it, or choose another microphone with `--device N`.
+- The first time, macOS asks whether the terminal may use the microphone. Allow it.
+- For each of your lines: press Enter, speak, press Enter again. Then Enter keeps it, `r` records it again, `p` plays it back, `q` quits and saves. Run the same command again to carry on where you stopped; earlier takes are kept in `data/audio_takes/` (git-ignored).
+- Read only the line on screen, with fillers and natural pace. The recording notes shown at the start are for you: do not read them aloud, and do not say the `<<V5>>`-style markers (they are not shown).
+- Keep the key words of marked lines as written.
+- The tool trims the silence your key presses leave, evens out the loudness, and puts a short natural pause between turns.
+- For noisy calls (`call_10`, `call_11`, `call_13`, `call_18`, `call_20`, `call_23`, `call_24`, `call_30`) use `--noise brown` (rumbly, like traffic) or `--noise pink`, or `--noise-file` with a recording of your own. Level 0.02 is faint, 0.12 loud; 0.05 to 0.08 is a good start. Speech must stay clearly audible.
+- Each finished call is marked as having a synthetic borrower in `data/audio_meta/call_NN.json`, and the evaluation report lists those calls and says what that means. Do not hide it.
+

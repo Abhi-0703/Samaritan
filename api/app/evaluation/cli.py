@@ -22,6 +22,7 @@ from app.detection.llm_judge import PROMPT_VERSION
 from app.evaluation import ingest as ingest_mod
 from app.evaluation import labelling, report, runner
 from app.evaluation.keys import KEYS_DIR, REPORTS_DIR, key_path, load_keys
+from app.evaluation.recorder import load_provenance
 from app.migrate import upgrade_to_head
 from app.models import Call
 from app.seed import seed_rules
@@ -95,7 +96,7 @@ def cmd_run(args) -> int:
                 print(f"  ... and {len(ev.not_evaluated) - 5} more")
             return 1
         runner.store(session, ev)
-        path = report.write_report(ev, datetime.now(runner.IST), REPORTS_DIR)
+        path = report.write_report(ev, datetime.now(runner.IST), REPORTS_DIR, load_provenance())
     print(f"Report written to {path}")
     for w in ev.warnings:
         print("warning:", w)

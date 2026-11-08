@@ -435,3 +435,16 @@ def test_cli_ingest_asks_before_spending_credits_and_declining_sends_nothing(
     out = capsys.readouterr().out
     assert "1 need transcribing: 1.0 audio minutes, about 0.3 Gnani credits" in out and "Nothing sent to Gnani." in out
     assert gnani_fake.requests == []
+
+
+def test_report_lists_calls_with_a_synthetic_borrower(session, runtime, llm_fake, add_call):
+    add_call("call_a", THREAT)
+    add_call("call_b", CLEAN)
+    llm_fake.responses = [answer()]
+    ev = evaluate(session, runtime, [key("call_a"), key("call_b", clean=True)])
+    prov = {"call_b": {"borrower": "synthetic"}, "call_z": {"borrower": "synthetic"}}  # call_z was not evaluated
+    text = report.render(ev, datetime(2026, 11, 6, tzinfo=IST), prov)
+    assert (
+        "Synthetic borrower voice (1 of 2 calls):** call_b." in text and "call_z" not in text.split("## rules_only")[0]
+    )
+    assert "Synthetic borrower" not in report.render(ev, datetime(2026, 11, 6, tzinfo=IST))
