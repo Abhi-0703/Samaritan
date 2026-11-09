@@ -15,11 +15,11 @@ import { useAsync } from "@/lib/hooks/use-async";
 import type { EvalRun, PRF } from "@/lib/types";
 
 const SLICES = [
-  { key: "all", label: "All 30 calls" },
-  { key: "test", label: "Held-out test (20)" },
-  { key: "hinglish", label: "Hinglish" },
-  { key: "marathi", label: "Marathi" },
-  { key: "noisy", label: "Noisy audio" },
+  { key: "all", name: "All calls" },
+  { key: "test", name: "Held-out test" },
+  { key: "hinglish", name: "Hinglish" },
+  { key: "marathi", name: "Marathi" },
+  { key: "noisy", name: "Noisy audio" },
 ] as const;
 
 type RuleRow = { code: string; name: string; counts: EvalRun["per_rule"][string] };
@@ -73,7 +73,12 @@ export function AccuracyView() {
 
   const plus = data?.rules_plus_llm ?? null;
   const only = data?.rules_only ?? null;
-  const sliceLabel = SLICES.find((s) => s.key === slice)?.label ?? "";
+  // Labels carry the real call counts from the run, so the page never claims more calls than were measured.
+  const count = (key: string) => plus?.per_slice[key]?.n_calls ?? 0;
+  const labelOf = (key: (typeof SLICES)[number]["key"]) => `${SLICES.find((x) => x.key === key)?.name} (${count(key)})`;
+  const sliceLabel = labelOf(slice);
+  const slices = SLICES.filter((x) => !plus || x.key === "all" || count(x.key) > 0);
+  const nAll = count("all");
 
   const body = () => {
     if (loading) return <BlockSkeleton className="h-80" />;
@@ -100,9 +105,9 @@ export function AccuracyView() {
             value={[slice]}
             onValueChange={(v) => v[0] && setSlice(v[0] as typeof slice)}
           >
-            {SLICES.map((x) => (
+            {slices.map((x) => (
               <ToggleGroupItem key={x.key} value={x.key} className="data-pressed:bg-brand-subtle data-pressed:text-brand-text">
-                {x.label}
+                {labelOf(x.key)}
               </ToggleGroupItem>
             ))}
           </ToggleGroup>
@@ -116,7 +121,7 @@ export function AccuracyView() {
           <KpiCard label="Precision" value={formatPct(s.precision, 1)} sub="Of flags raised, share correct" />
           <KpiCard label="Recall" value={formatPct(s.recall, 1)} sub="Of real violations, share found" />
           <KpiCard label="F1" value={formatPct(s.f1, 1)} sub="Balance of the two" />
-          <KpiCard label="Clean calls wrongly flagged" value={`${plus.clean_calls_flagged} of ${plus.clean_calls_total}`} sub="All 30 calls" />
+          <KpiCard label="Clean calls wrongly flagged" value={`${plus.clean_calls_flagged} of ${plus.clean_calls_total}`} sub={`All ${nAll} calls`} />
         </div>
 
         <div className="grid gap-6 lg:grid-cols-2">
@@ -131,7 +136,7 @@ export function AccuracyView() {
             </div>
           </Section>
 
-          <Section title="Timing and speaker mapping" description="Measured on all 30 calls.">
+          <Section title="Timing and speaker mapping" description={`Measured on all ${nAll} calls.`}>
             <div className="grid grid-cols-2 gap-4">
               <KpiCard label="Timestamp accuracy" value={formatPct(plus.timestamp_accuracy, 1)} sub="Correct flags within 5 s of the labelled moment" />
               <KpiCard label="Rule-level recall" value={formatPct(plus.rule_level_recall, 1)} sub="Right rule found, timing ignored" />
@@ -141,7 +146,7 @@ export function AccuracyView() {
           </Section>
         </div>
 
-        <Section title="By rule" description="Rules + LLM on all 30 calls. Correct: a real violation was found. False alarm: flagged, but not a violation. Missed: a real violation was not flagged.">
+        <Section title="By rule" description={`Rules + LLM on all ${nAll} calls. Correct: a real violation was found. False alarm: flagged, but not a violation. Missed: a real violation was not flagged.`}>
           <div className="overflow-hidden rounded-lg border">
             <DataTable label="Accuracy by rule" minWidth={640} data={perRule} columns={ruleColumns} getRowId={(r) => r.code} rightAligned={[]} />
           </div>
@@ -163,9 +168,11 @@ export function AccuracyView() {
         <section className="max-w-[68ch] space-y-2 text-muted-foreground" aria-label="Methodology">
           <h2 className="font-semibold text-foreground">How these numbers are measured</h2>
           <p>
-            Thirty acted calls, 22 in Hinglish and 8 in Marathi, were recorded from scripts and labelled by hand. Detection was tuned on the 10 development calls only; the 20
-            held-out test calls were never used for tuning. A flag counts as correct when it names the right rule and falls within 5 seconds of the labelled moment, except
-            for call-time and introduction flags, which match on the rule alone.
+            {nAll} acted calls ({count("hinglish")} in Hinglish, {count("marathi")} in Marathi) were recorded from scripts and labelled by hand. Detection was tuned on the{" "}
+            {count("dev")} development calls only; the {count("test")} held-out test calls were never used for tuning. A flag counts as correct when it names the right rule and
+            falls within 5 seconds of the labelled moment, except for call-time and introduction flags, which match on the rule alone. Calls recorded by one person use a computer-voice
+            borrower, which makes telling the speakers apart easier than on a real two-person call, so read the speaker-role number with that in mind. This is a small sample, not proof of
+            accuracy on real calls.
           </p>
           <p>Flags are decision support, not legal findings.</p>
         </section>
