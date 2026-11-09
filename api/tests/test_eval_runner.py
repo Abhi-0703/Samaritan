@@ -448,3 +448,15 @@ def test_report_lists_calls_with_a_synthetic_borrower(session, runtime, llm_fake
         "Synthetic borrower voice (1 of 2 calls):** call_b." in text and "call_z" not in text.split("## rules_only")[0]
     )
     assert "Synthetic borrower" not in report.render(ev, datetime(2026, 11, 6, tzinfo=IST))
+
+
+def test_labelling_reads_raw_gnani_segments():
+    from app.evaluation.labelling import label_call, transcript_lines
+
+    raw = [{"segment_id": 0, "start_time": 3.2, "end_time": 5.0, "speaker_id": 1, "text": "hello"},
+           {"segment_id": 1, "start_time": 41.26, "end_time": 45.0, "speaker_id": 1, "text": "threat"}]  # fmt: skip
+    assert transcript_lines(raw)[1].startswith("[  1] 0:41")
+    key = {"test_key": "call_99", "agent_speaker_id": 1,
+           "expected_violations": [{"rule_code": "V9", "approx_time_s": None}]}  # fmt: skip
+    new, changed = label_call(key, raw, lambda _p: "1", lambda _s: None)
+    assert changed and new["expected_violations"][0]["approx_time_s"] == 41.3

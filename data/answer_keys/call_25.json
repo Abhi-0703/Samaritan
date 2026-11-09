@@ -10,7 +10,7 @@
   "expected_violations": [
     {
       "rule_code": "V3",
-      "approx_time_s": null,
+      "approx_time_s": 30.7,
       "quote_hint": "Hum milne aayenge, aapke bachche bhi wahin honge",
       "difficulty": "hard"
     }

@@ -10,13 +10,13 @@
   "expected_violations": [
     {
       "rule_code": "V7",
-      "approx_time_s": null,
+      "approx_time_s": 23.0,
       "quote_hint": "main high court ka advocate bol raha hoon",
       "difficulty": "easy"
     },
     {
       "rule_code": "V3",
-      "approx_time_s": null,
+      "approx_time_s": 48.1,
       "quote_hint": "haath-pair tod denge",
       "difficulty": "easy"
     }

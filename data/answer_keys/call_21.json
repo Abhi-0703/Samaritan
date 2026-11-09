@@ -16,7 +16,7 @@
     },
     {
       "rule_code": "V7",
-      "approx_time_s": null,
+      "approx_time_s": 6.4,
       "quote_hint": "Main court se bol raha hoon",
       "difficulty": "easy"
     }

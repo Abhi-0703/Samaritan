@@ -10,7 +10,7 @@
   "expected_violations": [
     {
       "rule_code": "V6",
-      "approx_time_s": null,
+      "approx_time_s": 13.4,
       "quote_hint": "Mahesh Kamble ne loan liya tha, teen mahine se EMI nahi bhari",
       "difficulty": "easy"
     }

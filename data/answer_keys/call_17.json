@@ -10,13 +10,13 @@
   "expected_violations": [
     {
       "rule_code": "V4",
-      "approx_time_s": null,
+      "approx_time_s": 21.3,
       "quote_hint": "arrest warrant nikalwa raha hoon",
       "difficulty": "easy"
     },
     {
       "rule_code": "V9",
-      "approx_time_s": null,
+      "approx_time_s": 33.6,
       "quote_hint": "Abhi ke abhi payment karo, warna ye aakhri mauka hai",
       "difficulty": "easy"
     }

@@ -15,9 +15,14 @@ def _mmss(seconds: float) -> str:
     return f"{int(seconds // 60)}:{int(seconds % 60):02d}"
 
 
+def start_of(segment: dict) -> float:
+    """Gnani's raw segments say `start_time`; normalised ones say `start_s`."""
+    return float(segment["start_time"] if "start_time" in segment else segment["start_s"])
+
+
 def transcript_lines(segments: list[dict]) -> list[str]:
     return [
-        f"[{i:>3}] {_mmss(s['start_s'])}  speaker {s.get('speaker_id')}: {s['text']}" for i, s in enumerate(segments)
+        f"[{i:>3}] {_mmss(start_of(s))}  speaker {s.get('speaker_id')}: {s['text']}" for i, s in enumerate(segments)
     ]
 
 
@@ -51,7 +56,7 @@ def label_call(
             if not answer:
                 break
             if answer.isdigit() and int(answer) < len(segments):
-                v["approx_time_s"] = round(float(segments[int(answer)]["start_s"]), 1)
+                v["approx_time_s"] = round(start_of(segments[int(answer)]), 1)
                 changed = True
                 break
             show(f"Please answer with a number from 0 to {len(segments) - 1}.")

@@ -10,7 +10,7 @@
   "expected_violations": [
     {
       "rule_code": "V6",
-      "approx_time_s": null,
+      "approx_time_s": 14.7,
       "quote_hint": "Prakash ji ne personal loan liya tha, unki chaar EMI baaki hain",
       "difficulty": "hard"
     }

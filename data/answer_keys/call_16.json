@@ -16,7 +16,7 @@
     },
     {
       "rule_code": "V5",
-      "approx_time_s": null,
+      "approx_time_s": 40.1,
       "quote_hint": "society mein sabko pata chal jayega",
       "difficulty": "easy"
     }

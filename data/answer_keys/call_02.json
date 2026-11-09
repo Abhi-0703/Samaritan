@@ -10,13 +10,13 @@
   "expected_violations": [
     {
       "rule_code": "V9",
-      "approx_time_s": null,
+      "approx_time_s": 39.4,
       "quote_hint": "Abhi ke abhi payment karo, ye aakhri mauka hai aapke paas",
       "difficulty": "easy"
     },
     {
       "rule_code": "V2",
-      "approx_time_s": null,
+      "approx_time_s": 55.1,
       "quote_hint": "Tum chor ho, loan lekar bhaagne wale log hote ho",
       "difficulty": "easy"
     }

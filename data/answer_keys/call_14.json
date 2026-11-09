@@ -10,13 +10,13 @@
   "expected_violations": [
     {
       "rule_code": "V7",
-      "approx_time_s": null,
+      "approx_time_s": 26.3,
       "quote_hint": "main RBI ke recovery cell se bol raha hoon",
       "difficulty": "easy"
     },
     {
       "rule_code": "V4",
-      "approx_time_s": null,
+      "approx_time_s": 51.3,
       "quote_hint": "Kal police aa jayegi aur jail bhej denge",
       "difficulty": "easy"
     }
