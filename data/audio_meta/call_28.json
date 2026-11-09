@@ -1,0 +1,15 @@
+{
+  "test_key": "call_28",
+  "agent": "human, microphone",
+  "borrower": "synthetic",
+  "voice": "Rishi",
+  "voice_rate": 150,
+  "noise": null,
+  "turns": {
+    "agent": 10,
+    "borrower": 9
+  },
+  "duration_s": 114.4,
+  "made_with": "scripts/record_call.py",
+  "made_at": "2026-11-08T21:31:32+00:00"
+}
