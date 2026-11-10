@@ -1,6 +1,6 @@
 # Samaritan: X post drafts
 
-Check the Gnani AI handle before posting (the drafts assume @GnaniAI). Attach the demo video to the first post. Open the live site once just before posting, so the free server is awake.
+Before posting: (1) check the Gnani AI handle (the drafts assume @GnaniAI); (2) replace every {{PASSCODE}} with the real demo passcode, or delete those lines. Attach the demo video to the first post. Open the live site once just before posting, so the free server is awake.
 
 ## Option A: one long post (X Premium, about 3,200 characters; the first lines show before "Show more")
 
@@ -51,7 +51,9 @@ FastAPI + SQLAlchemy, Next.js 16 + TypeScript (strict), Supabase Postgres with r
 Try it, break it, and tell me what it misses 👇
 🔗 https://samaritan-six.vercel.app
 💻 https://github.com/Abhi-0703/Samaritan
-(The first load can take a minute while the free server wakes up.)
+
+To upload your own call, use the demo passcode: {{PASSCODE}}
+(Free-tier credits, so please keep it to a call or two. The first load can take a minute while the free server wakes up.)
 
 ---
 
@@ -85,7 +87,7 @@ Samaritan listens to all of them.
 
 Upload a recording → it transcribes, works out who is agent and who is borrower, checks 9 RBI-style rules and pins each violation on the waveform. Click a flag, hear the exact moment.
 
-Built for compliance and QA teams.
+Built for compliance and QA teams. Upload your own call and try it.
 
 ---
 
@@ -124,6 +126,7 @@ Caveat: I was the agent, a robot the borrower. Small sample, no Marathi yet.
 
 Stack: FastAPI, Next.js 16 + TypeScript, Supabase (Postgres + private audio storage), Render, Vercel. ~400 tests, no secrets in the repo.
 
-Try it, break it, tell me what it misses 👇
+Break it, tell me what it misses 👇
 🔗 https://samaritan-six.vercel.app
 💻 https://github.com/Abhi-0703/Samaritan
+🔑 Upload your own call: {{PASSCODE}}
