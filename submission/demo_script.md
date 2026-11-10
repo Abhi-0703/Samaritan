@@ -2,6 +2,21 @@
 
 The form asks for a 2–3 minute demo of the build. This script runs about 2:45 with the live upload. Lines in quotes are what you say; lines in [brackets] are what is on screen.
 
+## Slides
+
+`submission/samaritan_intro.pptx` (open it in Keynote or PowerPoint) has six slides and speaker notes with your lines for each. Use it like this:
+
+| Slide | Say | Script time |
+|---|---|---|
+| 1. SAMARITAN banner | the hook | 0:00 |
+| 2. Nobody can listen to every call | the problem | 0:15 |
+| 3. Samaritan listens to all of them | what it does, who it is for | 0:35 |
+| 4. How it decides | the pipeline (you can also show this while the upload processes) | 0:50 or during the wait |
+| 5. Built with | optional, skip if running long | |
+| 6. Now, let's audit a call. Live. | then switch to the browser | 1:00 |
+
+Present slides 1 to 3 (and 6) before the live demo; slide 4 works well while the upload processes.
+
 ## Before you press record (10 minutes)
 
 1. **Wake the server.** Open https://samaritan-six.vercel.app and let the Overview fill in. Render's free plan sleeps when idle.
