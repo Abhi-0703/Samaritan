@@ -39,6 +39,9 @@ def isolated_env(tmp_path, monkeypatch, pg_url):
         monkeypatch.setenv("DATABASE_URL", pg_url)
     else:
         monkeypatch.setenv("DATABASE_URL", f"sqlite:///{tmp_path / 'test.db'}")
+    monkeypatch.setenv("STORAGE_BACKEND", "local")  # never the real Supabase bucket, whatever api/.env says
+    monkeypatch.setenv("SUPABASE_URL", "")
+    monkeypatch.setenv("SUPABASE_SERVICE_ROLE_KEY", "")
     monkeypatch.setenv("LOCAL_AUDIO_DIR", str(tmp_path / "audio"))
     monkeypatch.setenv("GNANI_API_KEY", "test-gnani-key-0000")
     monkeypatch.setenv("GROQ_API_KEY", "test-groq-key-0000")
