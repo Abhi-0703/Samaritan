@@ -2,6 +2,7 @@
 
 **An AI auditor for loan-recovery calls.** A lender uploads call recordings. Samaritan transcribes them with Gnani's speech-to-text, works out who is the agent and who is the borrower, checks nine RBI-style recovery-conduct rules, and pins every violation on the audio waveform so a reviewer can hear the exact moment, then confirm or dismiss it. Each call and each agent gets a compliance score, and the app publishes its own measured accuracy.
 
+- **One-page pitch:** [submission/project_explanation.md](submission/project_explanation.md)
 - **Live demo:** https://samaritan-six.vercel.app (the first load can take up to a minute while the free API server wakes up)
 - **Who it is for:** compliance teams, QA leads and anyone who has to audit collection calls at a lender or a collections agency.
 - **Browsing is open.** Uploading your own call needs a demo passcode, because every upload spends speech-to-text and LLM credits. The passcode is shared in the launch post and on request.
