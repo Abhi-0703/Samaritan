@@ -148,8 +148,10 @@ Does it work? On 14 held-out calls: 88% precision, 93% recall, 0 clean calls wro
 
 Try it 👇
 🔗 https://samaritan-six.vercel.app
-🔑 Upload password: samaritan2026
-Upload your own Hinglish call (English too, less tested). Marathi is next! Uploads cost me credits, so I'll change the password when they run low. Please keep it to a call or two 🙏
+No password needed to explore: open any call it has already analysed, listen to the audio and see every flag.
+
+🔑 To analyse your own call, the upload password is: samaritan2026
+Upload a Hinglish call (English too, less tested). Marathi is next! Uploads cost me credits, so I'll change the password when they run low. Please keep it to a call or two 🙏
 
 📱 Works on your phone too
 ⏳ First load can take up to a minute: free-tier server waking up
