@@ -71,7 +71,7 @@ Measured on the labelled calls with Gnani config A (prisma-v3.0, Hindi and Engli
 **Read these numbers with care:**
 
 - **Small sample.** 22 calls is far too few to claim a general accuracy. Treat this as a promising prototype, not a proven auditor.
-- **Acted calls, one real voice.** The calls were recorded from scripts. I played the agent on a microphone, and a computer voice (macOS "Rishi") played the borrower, because I had nobody to record with. Two very different voices are easier to tell apart than two real callers, so the speaker-role number flatters the system.
+- **Acted calls, mostly with a computer-voice borrower.** All calls were recorded from scripts. 5 of the 22 (call_01, 02, 08, 10, 16) are two real people. The other 17 were recorded alone: I played the agent on a microphone and a computer voice (macOS "Rishi") played the borrower, because I had nobody else to record with. Two very different voices are easier to tell apart than two real callers, so the speaker-role number flatters the system. Of the 14 held-out calls, 2 are two-person calls and 12 have the computer-voice borrower.
 - **Same author.** The scripts, the rules and the answer keys were all written by the same person.
 - **No Marathi results.** The code has Marathi patterns and the 8 Marathi scripts exist in `data/scripts/`, but none was recorded, so Marathi is untested. The app does not claim to handle it.
 - **Real audio only on the recorded calls.** The planned test set has 30 scripts; 22 were recorded and measured.

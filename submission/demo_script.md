@@ -65,7 +65,7 @@ The form asks for a 2–3 minute demo of the build. This version uses the slides
 
 ### Browser · Does it work? (2:25–2:45)
 [Open the Accuracy page.]
-"Does it work? On fourteen held-out calls: eighty-eight percent precision, ninety-three percent recall, and zero clean calls wrongly flagged. Honest caveat: I played the agent, a robot played the borrower, and it is only twenty-two calls. This is a prototype, not a verdict."
+"Does it work? On fourteen held-out calls: eighty-eight percent precision, ninety-three percent recall, and zero clean calls wrongly flagged. Honest caveat: it is only twenty-two acted calls, and most of them have a robot as the borrower. This is a prototype, not a verdict."
 
 ### Slide 5 · Close (2:45–2:55)
 [Switch to slide 5, Built with.]

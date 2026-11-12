@@ -43,7 +43,7 @@ THINGS THAT BIT ME
 DOES IT WORK?
 22 recorded Hinglish calls, with violations scripted into some. On the held-out 14: 88% precision, 93% recall, and 0 of 8 clean calls wrongly flagged. With rules alone, precision is 66%. The LLM layer earns its keep.
 
-Honest caveats: I played the agent and a computer voice played the borrower, so telling the speakers apart is easier than on a real call. It's a small sample and there are no Marathi calls yet. Treat it as a promising prototype, not a proven auditor.
+Honest caveats: 17 of the 22 calls have a computer voice as the borrower (5 are two real people), so telling the speakers apart is easier than on a real call. It's a small sample and there are no Marathi calls yet. Treat it as a promising prototype, not a proven auditor.
 
 UNDER THE HOOD
 FastAPI + SQLAlchemy, Next.js 16 + TypeScript (strict), Supabase Postgres with row-level security, a private audio bucket with short-lived signed links, Render and Vercel. Transcripts and LLM answers are cached, so re-running costs nothing. About 400 tests. No secrets in the repo.
@@ -118,7 +118,7 @@ Does it work? 22 recorded Hinglish calls, violations hidden in some.
 
 Held-out 14: 88% precision, 93% recall, 0 of 8 clean calls wrongly flagged. Rules alone: 66% precision. The LLM earns its keep.
 
-Caveat: I was the agent, a robot the borrower. Small sample, no Marathi yet.
+Caveat: small acted set, and in most calls the borrower is a robot. No Marathi yet.
 
 ---
 
@@ -144,7 +144,7 @@ How it works:
 🔎 Word lists + a clock check find the suspects
 🧠 An LLM judges the context, but it must quote the call. No quote, no flag. It can't invent a crime.
 
-Does it work? On 14 held-out calls: 88% precision, 93% recall, 0 clean calls wrongly flagged. Honest caveat: small acted set, and the borrower was a robot 🤖
+Does it work? On 14 held-out calls: 88% precision, 93% recall, 0 clean calls wrongly flagged. Honest caveat: it's a small acted set (22 calls, 5 with two real people, the rest with a robot borrower 🤖)
 
 Try it 👇
 🔗 https://samaritan-six.vercel.app

@@ -20,7 +20,7 @@ Stack: FastAPI and SQLAlchemy, Next.js 16 with TypeScript, Supabase Postgres and
 ## Does it work? (measured, with the caveats)
 On 22 recorded Hinglish calls, the held-out 14 give **88% precision and 93% recall**, with **0 of 8 clean calls wrongly flagged**. Rules alone reach 66% precision, so the LLM layer earns its place. The accuracy page in the app shows every number, and the README lists every known failure.
 
-This is a prototype, not a proven auditor: the sample is small, the calls are acted from scripts, I played the agent while a computer voice played the borrower (which makes telling speakers apart easier than on real calls), and Marathi is built but untested on real audio.
+This is a prototype, not a proven auditor: the sample is small, the calls are acted from scripts, 5 of the 22 are two real people and the other 17 have me as the agent with a computer voice as the borrower (which makes telling speakers apart easier than on real calls), and Marathi is built but untested on real audio.
 
 ## Gnani models used
 Gnani Vachana **prisma-v3.0** speech-to-text (batch API, Hindi and English, diarization on).
