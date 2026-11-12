@@ -130,3 +130,28 @@ Break it, tell me what it misses 👇
 🔗 https://samaritan-six.vercel.app
 💻 https://github.com/Abhi-0703/Samaritan
 🔑 Upload your own call: {{PASSCODE}}
+
+---
+
+## Final post (as posted, about 1,300 characters, attach the demo video)
+
+A few days ago I became the world's worst debt collector. I threatened people. I lied. I pretended to be the RBI. All to a robot called Rishi. Then I built an AI to catch me. This is Samaritan. 🎧
+
+What it does: you upload a loan-recovery call and it tells you whether the agent broke the rules. No calls at 10pm. No threats. No shaming. No posing as police. 9 RBI-style rules, every violation pinned on the waveform. Click a flag, hear the exact moment.
+
+How it works:
+🎙 @GnaniAI Vachana speech-to-text turns the call into text, with speakers
+🔎 Word lists + a clock check find the suspects
+🧠 An LLM judges the context, but it must quote the call. No quote, no flag. It can't invent a crime.
+
+Does it work? On 14 held-out calls: 88% precision, 93% recall, 0 clean calls wrongly flagged. Honest caveat: small acted set, and the borrower was a robot 🤖
+
+Try it 👇
+🔗 https://samaritan-six.vercel.app
+🔑 Upload password: samaritan2026
+Upload your own Hinglish call (English too, less tested). Marathi is next! Uploads cost me credits, so I'll change the password when they run low. Please keep it to a call or two 🙏
+
+📱 Works on your phone too
+⏳ First load can take up to a minute: free-tier server waking up
+
+Suggestions and ideas to improve it? I'd love to hear them. #GnaniAI #GreatIndianAIInternshipChallenge
