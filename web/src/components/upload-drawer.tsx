@@ -11,13 +11,12 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Sheet, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { api, MOCK_PASSCODE_HINT } from "@/lib/api";
+import { validateAudioFile } from "@/lib/audio-file";
 import { defaultCallTimeInput, istInputToIso } from "@/lib/ist";
 import { clearStoredPasscode, getStoredPasscode, setStoredPasscode } from "@/lib/passcode";
 import { ApiError, type Agent, type Language, type UploadMetadata } from "@/lib/types";
 import { cn } from "@/lib/utils";
 
-const ALLOWED = ["wav", "mp3", "m4a", "ogg", "flac"];
-const MAX_BYTES = 25 * 1024 * 1024;
 const NEW_AGENT = "__new__";
 
 interface Entry {
@@ -33,13 +32,6 @@ interface Entry {
 }
 
 const randomLoanRef = () => `SF-PL-${Math.floor(100000 + Math.random() * 900000)}`;
-
-function validateFile(file: File): string | undefined {
-  const ext = file.name.split(".").pop()?.toLowerCase() ?? "";
-  if (!ALLOWED.includes(ext)) return "Not a supported audio file. Use wav, mp3, m4a, ogg or flac.";
-  if (file.size > MAX_BYTES) return "Larger than 25 MB.";
-  return undefined;
-}
 
 function parseCsv(text: string): Record<string, string>[] {
   const lines = text.split(/\r?\n/).filter((l) => l.trim());
@@ -79,7 +71,7 @@ export function UploadDrawer({
       language: "hinglish",
       loanRef: randomLoanRef(),
       requested: false,
-      error: validateFile(file),
+      error: validateAudioFile(file),
     }));
     setEntries((prev) => [...prev, ...next]);
     setFormError(undefined);

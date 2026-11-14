@@ -26,7 +26,7 @@ import { usePersistentFlag } from "@/lib/hooks/use-persistent-flag";
 import { cn } from "@/lib/utils";
 
 const NAV = [
-  { href: "/", label: "Overview", icon: LayoutDashboard },
+  { href: "/dashboard", label: "Overview", icon: LayoutDashboard },
   { href: "/calls", label: "Calls", icon: PhoneCall },
   { href: "/agents", label: "Agents", icon: Users },
   { href: "/rules", label: "Rules", icon: ListChecks },
@@ -34,7 +34,7 @@ const NAV = [
 ] as const;
 
 function isActive(pathname: string, href: string) {
-  return href === "/" ? pathname === "/" : pathname === href || pathname.startsWith(`${href}/`);
+  return pathname === href || pathname.startsWith(`${href}/`);
 }
 
 function ThemeToggle({ collapsed }: { collapsed: boolean }) {
@@ -110,10 +110,10 @@ function SidebarBody({
             S
           </span>
         ) : (
-          <div className="min-w-0">
+          <Link href="/" className="min-w-0" aria-label="Samaritan home">
             <p className="font-semibold leading-5">Samaritan</p>
             <p className="truncate text-xs text-muted-foreground">Sahyog Finance · Collections QA</p>
-          </div>
+          </Link>
         )}
       </div>
 
@@ -177,7 +177,9 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               <SidebarBody collapsed={false} onNavigate={() => setMobileOpen(false)} />
             </SheetContent>
           </Sheet>
-          <span className="font-semibold">Samaritan</span>
+          <Link href="/" className="font-semibold">
+            Samaritan
+          </Link>
         </div>
         <ApiStatus />
         <div className="flex-1">{children}</div>

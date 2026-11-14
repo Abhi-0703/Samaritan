@@ -55,7 +55,18 @@ function ProcessingCard({ status }: { status: CallStatus }) {
   );
 }
 
-export function CallDetailView({ id }: { id: string }) {
+export function CallDetailView({
+  id,
+  backHref = "/calls",
+  backLabel = "Back to calls",
+  extraActions,
+}: {
+  id: string;
+  backHref?: string;
+  backLabel?: string;
+  /** Extra buttons placed first in the header, used by the upload page for "Go to dashboard". */
+  extraActions?: React.ReactNode;
+}) {
   const sp = useSearchParams();
   const initialSeek = sp.get("t") !== null ? Number(sp.get("t")) : null;
   const call = useAsync(() => api.getCall(id), id);
@@ -121,7 +132,7 @@ export function CallDetailView({ id }: { id: string }) {
     });
 
   const back = (
-    <Link href="/calls" aria-label="Back to calls" className={buttonVariants({ variant: "ghost", size: "icon-sm" })}>
+    <Link href={backHref} aria-label={backLabel} className={buttonVariants({ variant: "ghost", size: "icon-sm" })}>
       <ArrowLeft aria-hidden />
     </Link>
   );
@@ -166,6 +177,7 @@ export function CallDetailView({ id }: { id: string }) {
         back={back}
         actions={
           <>
+            {extraActions}
             {done && (
               <Link href={`/calls/${d.id}/evidence`} aria-label="Evidence summary" className={buttonVariants({ variant: "outline" })}>
                 <FileText aria-hidden data-icon="inline-start" />

@@ -1,8 +1,11 @@
 import type { Metadata } from "next";
-import { OverviewView } from "@/components/overview-view";
+import { LandingPage } from "@/components/landing/landing-page";
 
-export const metadata: Metadata = { title: "Overview" };
+export const metadata: Metadata = {
+  title: { absolute: "Samaritan: AI auditor for loan-recovery calls" },
+  description: "Upload a recovery call and Samaritan finds every RBI-style conduct violation, pinned on the waveform.",
+};
 
-export default function OverviewPage() {
-  return <OverviewView />;
+export default function HomePage() {
+  return <LandingPage />;
 }

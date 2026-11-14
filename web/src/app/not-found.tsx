@@ -9,7 +9,7 @@ export default function NotFound() {
       <PageContent>
         <div className="flex flex-col items-start gap-3">
           <p className="text-muted-foreground">There is nothing at this address.</p>
-          <Link href="/" className={buttonVariants({ variant: "outline" })}>
+          <Link href="/dashboard" className={buttonVariants({ variant: "outline" })}>
             Go to Overview
           </Link>
         </div>
