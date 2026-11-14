@@ -61,5 +61,5 @@ Live-upload test on the deployed site (one short call; spends about 0.7 Gnani cr
 
 ## Environment (no secrets)
 - Gnani key: provided and verified (read-only list-jobs call returned 200)  LLM keys: Groq and Gemini provided and verified (model lists fetched)
-- Database: Supabase Postgres via the Session pooler (`api/.env`; local SQLite copy in `api/local.db`)   Deployed: yes. API https://samaritan-api.onrender.com (Render free, Docker, `render.yaml`, auto-deploys from `main`), web https://samaritan-six.vercel.app (Vercel, root `web`, DATA_SOURCE=api, DEMO_MODE=true). Free Render sleeps after ~15 min idle (about a minute to wake)
+- Database: Supabase Postgres via the Session pooler (`api/.env`; local SQLite copy in `api/local.db`)   Deployed: yes. API https://samaritan-api.onrender.com (Render free, Docker, `render.yaml`, auto-deploys from `main`), web https://samaritan-six.vercel.app (Vercel, root `web`, DATA_SOURCE=api, DEMO_MODE=true). Routes: `/` landing page, `/try` upload then live progress then full analysis, `/dashboard` the Overview (sidebar group `(app)` holds dashboard, calls, agents, rules, accuracy). Free Render sleeps after ~15 min idle (about a minute to wake)
 - Tools: node v24, npm 11, git 2.54, python3.11 3.11.18, ffmpeg 9.0.2
