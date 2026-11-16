@@ -8,6 +8,7 @@ import { CallDetailView } from "@/components/call-detail-view";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { api, MOCK_PASSCODE_HINT } from "@/lib/api";
 import { validateAudioFile } from "@/lib/audio-file";
 import { formatDuration, isTerminal, statusLabel } from "@/lib/format";
@@ -20,6 +21,8 @@ import { cn } from "@/lib/utils";
 const pill = "inline-flex h-12 items-center justify-center gap-2 rounded-full px-6 text-base font-medium whitespace-nowrap transition-all duration-200";
 const primary = cn(pill, "bg-[#35c9b0] text-[#06201c] shadow-[0_12px_44px_-12px_rgba(53,201,176,0.75)] hover:-translate-y-0.5 hover:bg-[#5fe0c8] disabled:pointer-events-none disabled:opacity-50");
 const secondary = cn(pill, "border border-white/15 bg-white/5 text-white hover:border-white/30 hover:bg-white/10");
+
+const NEW_AGENT = "__new__";
 
 const STEPS: CallStatus[] = ["queued", "transcribing", "analysing", "done"];
 const STEP_HINT: Record<string, string> = {
@@ -207,7 +210,9 @@ function UploadForm({ onUploaded }: { onUploaded: (id: string) => void }) {
   const [file, setFile] = useState<File | null>(null);
   const [fileError, setFileError] = useState<string>();
   const [dragging, setDragging] = useState(false);
-  const [agentName, setAgentName] = useState("Visitor Agent");
+  const agents = useAsync(() => api.listAgents(), "try-agents");
+  const [agent, setAgent] = useState(""); // an agent id, NEW_AGENT or ""
+  const [newAgentName, setNewAgentName] = useState("");
   const [calledAt, setCalledAt] = useState(defaultCallTimeInput);
   const [requested, setRequested] = useState(false);
   const [passcode, setPasscode] = useState(getStoredPasscode);
@@ -215,6 +220,7 @@ function UploadForm({ onUploaded }: { onUploaded: (id: string) => void }) {
   const [progress, setProgress] = useState(0);
   const [formError, setFormError] = useState<string>();
   const input = useRef<HTMLInputElement>(null);
+  const agentOptions = [...(agents.data ?? []).map((a) => ({ value: a.id, label: a.name })), { value: NEW_AGENT, label: "New agent" }];
 
   const pick = useCallback((f: File | undefined) => {
     if (!f) return;
@@ -228,7 +234,9 @@ function UploadForm({ onUploaded }: { onUploaded: (id: string) => void }) {
     setFormError(undefined);
     if (!file) return setFormError("Choose an audio file first.");
     if (fileError) return;
-    if (!agentName.trim()) return setFormError("Give the agent a name, any name works.");
+    const typingName = agent === NEW_AGENT || (agents.error && !agents.data);
+    if (!typingName && !agent) return setFormError("Choose an agent.");
+    if (typingName && !newAgentName.trim()) return setFormError("Enter the agent's name.");
     if (!calledAt) return setFormError("Enter when the call was made.");
     if (api.demoMode && !passcode.trim()) return setFormError("Enter the demo password to upload.");
     setBusy(true);
@@ -238,7 +246,7 @@ function UploadForm({ onUploaded }: { onUploaded: (id: string) => void }) {
         [
           {
             filename: file.name,
-            agent_name: agentName.trim(),
+            ...(typingName ? { agent_name: newAgentName.trim() } : { agent_id: agent }),
             called_at: istInputToIso(calledAt),
             language: "hinglish",
             loan_ref: `SF-PL-${Math.floor(100000 + Math.random() * 900000)}`,
@@ -318,8 +326,23 @@ function UploadForm({ onUploaded }: { onUploaded: (id: string) => void }) {
 
         <div className="grid gap-5 sm:grid-cols-2">
           <div className="space-y-1.5">
-            <Label htmlFor="agent">Agent name</Label>
-            <Input id="agent" value={agentName} onChange={(e) => setAgentName(e.target.value)} className="h-10" />
+            <Label htmlFor="agent">Agent</Label>
+            {agents.error && !agents.data ? (
+              <Input id="agent" placeholder="Agent name" value={newAgentName} onChange={(e) => setNewAgentName(e.target.value)} className="h-10" />
+            ) : (
+              <Select items={agentOptions} value={agent || null} onValueChange={(v) => setAgent(String(v ?? ""))} disabled={agents.loading}>
+                <SelectTrigger id="agent" aria-label="Agent" className="h-10 w-full">
+                  <SelectValue placeholder={agents.loading ? "Loading agents…" : "Choose agent"} />
+                </SelectTrigger>
+                <SelectContent alignItemWithTrigger={false} className="dark lp-theme">
+                  {agentOptions.map((o) => (
+                    <SelectItem key={o.value} value={o.value}>
+                      {o.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            )}
           </div>
           <div className="space-y-1.5">
             <Label htmlFor="at">Call made at (IST)</Label>
@@ -329,6 +352,12 @@ function UploadForm({ onUploaded }: { onUploaded: (id: string) => void }) {
         <p className="-mt-2 text-sm text-white/45">
           The time matters: calls before 8 am or after 7 pm break the calling-hours rule. Try 9:40 pm to see it fire.
         </p>
+        {agent === NEW_AGENT && (
+          <div className="space-y-1.5">
+            <Label htmlFor="new-agent">New agent name</Label>
+            <Input id="new-agent" value={newAgentName} onChange={(e) => setNewAgentName(e.target.value)} className="h-10 max-w-xs" />
+          </div>
+        )}
         <label className="flex items-center gap-3 text-base">
           <Checkbox checked={requested} onCheckedChange={(c) => setRequested(c === true)} />
           <span>The borrower asked for this call time</span>
