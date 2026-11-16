@@ -47,7 +47,7 @@ export function ViolationsPerDayChart({ data }: { data: OverviewStats["violation
   const rows = data.map((d) => ({ ...d, label: formatDayLabel(d.date) }));
   return (
     <div>
-      <div role="img" aria-label="Stacked bar chart of violations per day over the last 14 days, split by severity" className="h-60">
+      <div role="img" aria-label="Stacked bar chart of violations per day over 14 days, split by severity" className="h-60">
         <ResponsiveContainer width="100%" height="100%">
           <BarChart data={rows} margin={{ top: 8, right: 8, bottom: 0, left: -16 }}>
             <CartesianGrid vertical={false} />

@@ -10,7 +10,7 @@ import { PageContent, PageHeader, Section } from "@/components/page-header";
 import { BlockSkeleton, ErrorState } from "@/components/states";
 import { buttonVariants } from "@/components/ui/button";
 import { api } from "@/lib/api";
-import { formatClock, formatDateTime, formatNumber } from "@/lib/format";
+import { formatClock, formatDateTime, formatDayLabel, formatNumber, istDayKey } from "@/lib/format";
 import { useAsync } from "@/lib/hooks/use-async";
 import type { OverviewStats } from "@/lib/types";
 import { cn } from "@/lib/utils";
@@ -72,14 +72,22 @@ const critColumns = critCols.columns([
   }),
 ]);
 
+/** "last 14 days" while the window ends today; otherwise it names the day it ends on, because the API ends the window on the latest call. */
+function windowLabel(data: { violations_per_day: { date: string }[] } | undefined): { phrase: string; short: string } {
+  const last = data?.violations_per_day.at(-1)?.date;
+  if (!last || last === istDayKey(new Date())) return { phrase: "the last 14 days", short: "Last 14 days" };
+  return { phrase: `the 14 days up to ${formatDayLabel(last)}`, short: `14 days up to ${formatDayLabel(last)}` };
+}
+
 export function OverviewView() {
   const { data, error, loading, reload } = useAsync(() => api.getOverview(), "overview");
+  const win = windowLabel(data);
 
   return (
     <>
       <PageHeader
         title="Overview"
-        description="Compliance across audited recovery calls in the last 14 days."
+        description={`Compliance across audited recovery calls in ${win.phrase}.`}
         actions={
           <Link href="/calls?upload=1" className={cn(buttonVariants({ size: "default" }))}>
             <Upload aria-hidden data-icon="inline-start" />
@@ -100,7 +108,7 @@ export function OverviewView() {
                 value={data && formatNumber(data.calls_with_violations)}
                 sub={data && `${data.calls_with_violations_pct.toFixed(1)}% of audited calls`}
               />
-              <KpiCard label="Critical flags" loading={loading} value={data && formatNumber(data.critical_flags)} sub="Last 14 days" />
+              <KpiCard label="Critical flags" loading={loading} value={data && formatNumber(data.critical_flags)} sub={win.short} />
               <KpiCard
                 label="Average compliance score"
                 loading={loading}
@@ -110,7 +118,7 @@ export function OverviewView() {
               <KpiCard label="Calls pending" loading={loading} value={data && formatNumber(data.calls_pending)} sub="Queued or processing" />
             </div>
 
-            <Section title="Violations per day" description="Non-dismissed flags on calls from the last 14 days, by severity.">
+            <Section title="Violations per day" description={`Non-dismissed flags on calls from ${win.phrase}, by severity.`}>
               <div className="rounded-lg border p-4">
                 {loading || !data ? <BlockSkeleton className="h-64" /> : <ViolationsPerDayChart data={data.violations_per_day} />}
               </div>

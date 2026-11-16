@@ -7,7 +7,7 @@ A call's score, `violations_count` and `max_severity` count only non-dismissed v
 from __future__ import annotations
 
 from collections import Counter, defaultdict
-from datetime import UTC, datetime, timedelta
+from datetime import UTC, date, datetime, timedelta
 
 from sqlalchemy import func, select
 from sqlalchemy.orm import Session, selectinload
@@ -205,7 +205,12 @@ def overview(session: Session, now: datetime | None = None) -> schemas.OverviewS
         )
         or 0
     )
-    window_days = [(now - timedelta(days=i)).astimezone(IST).date().isoformat() for i in range(13, -1, -1)]
+    # The 14-day window ends today, or on the most recent day that has a finished call if that is earlier, so a quiet
+    # spell does not leave the dashboard chart empty. The web app says which days it shows.
+    today = now.astimezone(IST).date()
+    latest = max((date.fromisoformat(ist_day(c.called_at)) for c in done), default=today)
+    end = min(today, latest)
+    window_days = [(end - timedelta(days=i)).isoformat() for i in range(13, -1, -1)]
     cutoff = window_days[0]
 
     per_day = {d: Counter() for d in window_days}

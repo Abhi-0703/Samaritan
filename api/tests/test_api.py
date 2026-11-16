@@ -472,10 +472,27 @@ def test_overview_counts_pending_and_handles_an_empty_database(client, session):
     assert client.get("/stats/overview").json()["calls_pending"] == 3
 
 
-def test_critical_flags_only_count_the_last_14_days(client, session):
+def test_critical_flags_only_count_the_14_days_before_the_latest_call(client, session):
     agent = make_agent(session)
     make_call(session, agent, called_at=datetime(2026, 1, 5, 11, 0, tzinfo=IST), violations=[("V4", "open")])
-    assert client.get("/stats/overview").json()["critical_flags"] == 0
+    make_call(session, agent, called_at=datetime(2026, 1, 25, 11, 0, tzinfo=IST), violations=[("V4", "open")])
+    assert client.get("/stats/overview").json()["critical_flags"] == 1  # 20 days before the latest call is out
+
+
+def test_the_chart_window_follows_the_latest_call_so_a_quiet_spell_never_empties_it(client, session):
+    agent = make_agent(session)
+    make_call(session, agent, called_at=datetime(2026, 1, 25, 11, 0, tzinfo=IST), violations=[("V4", "open")])
+    days = client.get("/stats/overview").json()["violations_per_day"]
+    assert len(days) == 14 and days[-1]["date"] == "2026-01-25" and days[0]["date"] == "2026-01-12"
+    assert sum(d["critical"] for d in days) == 1
+
+
+def test_the_chart_window_ends_today_when_there_are_calls_today(client, session):
+    agent = make_agent(session)
+    now = datetime.now(IST)
+    make_call(session, agent, called_at=now, violations=[("V4", "open")])
+    days = client.get("/stats/overview").json()["violations_per_day"]
+    assert days[-1]["date"] == now.date().isoformat() and days[-1]["critical"] == 1
 
 
 def test_unexpected_server_errors_are_wrapped_without_internals(runtime, monkeypatch):
